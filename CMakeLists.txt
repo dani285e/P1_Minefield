@@ -9,4 +9,6 @@ add_executable(P1_Minefield main.c
         movement/movement.c
         movement/movement.h
         map/map.c
-        map/map.h)
+        map/map.h
+        structs.h
+)

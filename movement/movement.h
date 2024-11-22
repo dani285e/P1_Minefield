@@ -2,14 +2,13 @@
 // Created by Danie on 20-11-2024.
 //
 
+
+
 #ifndef MOVEMENT_H
 #define MOVEMENT_H
+#include "../structs.h"
 
-typedef struct deminer{
-    int id;
-    int x;
-    int y;
-} Deminer;
+
 
 void move_up(Deminer *deminer);
 void move_down(Deminer *deminer);

@@ -3,6 +3,7 @@
 //
 
 #include "map.h"
+#include "colour/colour.h"
 #include <stdio.h>
 #include <stdlib.h>
 #define MINES 20
@@ -13,25 +14,33 @@
 #define OBSTACLE_STONE 3
 
 // Funktion der genererer en arena
-void createMap(int* mapSize, char** map) {
+void createMap(int* mapSize, struct Map* map[]) {
     char* cell; // Cell er en pointer til en char
     int mapSizetemp = (rand()% 20) + 10;;
-    *mapSize = mapSizetemp;
+    *mapSize = mapSizetemp * mapSizetemp;
+
+
     //printf("Please enter a map size\n");
     //scanf("%d", &mapSizetemp);
+
+
     printf("Map size is: %d\n", mapSizetemp);
-    *map = (char*)malloc(mapSizetemp*mapSizetemp*sizeof(char));
+    *map = (struct Map*)malloc(mapSizetemp * mapSizetemp * sizeof(struct Map));
+
+    int mapIndex = 0;
 
     for (int y = 0; y < mapSizetemp; y++) { // Nested for loop der kører igennem alle pladser i 2D arrayet
         for (int x = 0; x < mapSizetemp; x++) {
+            map[mapIndex]->y = y;
+            map[mapIndex]->x = x;
+
             int outcome = (rand() % MINES) + 1;
-            cell = getCell(*map, mapSizetemp, y, x); // Sætter cell pointeren lig med den pointer vi får tilbage af getCell funktionen
             if(outcome == 1) {
-                *cell = 'M';
+                map[mapIndex]->obstacle = 'M';
             } else if (outcome > 1 && outcome < 5) {
-                *cell = 'X';
+                map[mapIndex]->obstacle = 'X';
             } else {
-                *cell = 'O';
+                map[mapIndex]->obstacle = 'O';
             }
         }
     }

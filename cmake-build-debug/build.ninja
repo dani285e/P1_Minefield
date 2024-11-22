@@ -55,23 +55,23 @@ build CMakeFiles/P1_Minefield.dir/main.c.obj: C_COMPILER__P1_Minefield_unscanned
   OBJECT_DIR = CMakeFiles\P1_Minefield.dir
   OBJECT_FILE_DIR = CMakeFiles\P1_Minefield.dir
 
-build CMakeFiles/P1_Minefield.dir/colour.c.obj: C_COMPILER__P1_Minefield_unscanned_Debug D$:/Projecter/P1_Minefield/colour.c || cmake_object_order_depends_target_P1_Minefield
-  DEP_FILE = CMakeFiles\P1_Minefield.dir\colour.c.obj.d
+build CMakeFiles/P1_Minefield.dir/map/colour/colour.c.obj: C_COMPILER__P1_Minefield_unscanned_Debug D$:/Projecter/P1_Minefield/map/colour/colour.c || cmake_object_order_depends_target_P1_Minefield
+  DEP_FILE = CMakeFiles\P1_Minefield.dir\map\colour\colour.c.obj.d
   FLAGS = -g -std=gnu11 -fdiagnostics-color=always
   OBJECT_DIR = CMakeFiles\P1_Minefield.dir
-  OBJECT_FILE_DIR = CMakeFiles\P1_Minefield.dir
+  OBJECT_FILE_DIR = CMakeFiles\P1_Minefield.dir\map\colour
 
-build CMakeFiles/P1_Minefield.dir/movement.c.obj: C_COMPILER__P1_Minefield_unscanned_Debug D$:/Projecter/P1_Minefield/movement.c || cmake_object_order_depends_target_P1_Minefield
-  DEP_FILE = CMakeFiles\P1_Minefield.dir\movement.c.obj.d
+build CMakeFiles/P1_Minefield.dir/movement/movement.c.obj: C_COMPILER__P1_Minefield_unscanned_Debug D$:/Projecter/P1_Minefield/movement/movement.c || cmake_object_order_depends_target_P1_Minefield
+  DEP_FILE = CMakeFiles\P1_Minefield.dir\movement\movement.c.obj.d
   FLAGS = -g -std=gnu11 -fdiagnostics-color=always
   OBJECT_DIR = CMakeFiles\P1_Minefield.dir
-  OBJECT_FILE_DIR = CMakeFiles\P1_Minefield.dir
+  OBJECT_FILE_DIR = CMakeFiles\P1_Minefield.dir\movement
 
-build CMakeFiles/P1_Minefield.dir/map.c.obj: C_COMPILER__P1_Minefield_unscanned_Debug D$:/Projecter/P1_Minefield/map.c || cmake_object_order_depends_target_P1_Minefield
-  DEP_FILE = CMakeFiles\P1_Minefield.dir\map.c.obj.d
+build CMakeFiles/P1_Minefield.dir/map/map.c.obj: C_COMPILER__P1_Minefield_unscanned_Debug D$:/Projecter/P1_Minefield/map/map.c || cmake_object_order_depends_target_P1_Minefield
+  DEP_FILE = CMakeFiles\P1_Minefield.dir\map\map.c.obj.d
   FLAGS = -g -std=gnu11 -fdiagnostics-color=always
   OBJECT_DIR = CMakeFiles\P1_Minefield.dir
-  OBJECT_FILE_DIR = CMakeFiles\P1_Minefield.dir
+  OBJECT_FILE_DIR = CMakeFiles\P1_Minefield.dir\map
 
 
 # =============================================================================
@@ -81,7 +81,7 @@ build CMakeFiles/P1_Minefield.dir/map.c.obj: C_COMPILER__P1_Minefield_unscanned_
 #############################################
 # Link the executable P1_Minefield.exe
 
-build P1_Minefield.exe: C_EXECUTABLE_LINKER__P1_Minefield_Debug CMakeFiles/P1_Minefield.dir/main.c.obj CMakeFiles/P1_Minefield.dir/colour.c.obj CMakeFiles/P1_Minefield.dir/movement.c.obj CMakeFiles/P1_Minefield.dir/map.c.obj
+build P1_Minefield.exe: C_EXECUTABLE_LINKER__P1_Minefield_Debug CMakeFiles/P1_Minefield.dir/main.c.obj CMakeFiles/P1_Minefield.dir/map/colour/colour.c.obj CMakeFiles/P1_Minefield.dir/movement/movement.c.obj CMakeFiles/P1_Minefield.dir/map/map.c.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\P1_Minefield.dir
