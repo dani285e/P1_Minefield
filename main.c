@@ -1,7 +1,9 @@
 #include <stdio.h>
+#include "deminers.h"
 
-int main(void)
-{
-    printf("Hello, World!\n");
+int main(void) {
+
+    deminer();
+
     return 0;
 }
