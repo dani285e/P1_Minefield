@@ -10,13 +10,13 @@ void red() {
 void green() {
     printf("\033[0;32m");
 }
-void reset() {
-    printf("\033[0m");
-}
-
 void yellow() {
     printf("\033[0;33m");
 }
 void blue() {
     printf("\033[0;34m");
+}
+
+void reset() {
+    printf("\033[0m");
 }

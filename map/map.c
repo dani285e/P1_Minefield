@@ -13,38 +13,51 @@
 #define OBSTACLE_HILL 2
 #define OBSTACLE_STONE 3
 
+
 // Funktion der genererer en arena
-void createMap(int* mapSize, struct Map* map[]) {
+void createMap(int* mapSize, char** map) {
     char* cell; // Cell er en pointer til en char
-    int mapSizetemp = (rand()% 20) + 10;;
-    *mapSize = mapSizetemp * mapSizetemp;
-
-
+    int mapSizetemp = (rand()% 30) + 10;
+    *mapSize = mapSizetemp;
     //printf("Please enter a map size\n");
     //scanf("%d", &mapSizetemp);
-
-
     printf("Map size is: %d\n", mapSizetemp);
-    *map = (struct Map*)malloc(mapSizetemp * mapSizetemp * sizeof(struct Map));
+    *map = (char*)malloc(mapSizetemp*mapSizetemp*sizeof(char));
 
-    int mapIndex = 0;
-
-    for (int y = 0; y < mapSizetemp; y++) { // Nested for loop der kører igennem alle pladser i 2D arrayet
-        for (int x = 0; x < mapSizetemp; x++) {
-            map[mapIndex]->y = y;
-            map[mapIndex]->x = x;
-
+    for (int x = 0; x < mapSizetemp; x++) { // Nested for loop der kører igennem alle pladser i 2D arrayet
+        for (int y = 0; y < mapSizetemp; y++) {
             int outcome = (rand() % MINES) + 1;
+            cell = getCell(*map, mapSizetemp, x, y); // Sætter cell pointeren lig med den pointer vi får tilbage af getCell funktionen
             if(outcome == 1) {
-                map[mapIndex]->obstacle = 'M';
+                *cell = 'M';
             } else if (outcome > 1 && outcome < 5) {
-                map[mapIndex]->obstacle = 'X';
+                *cell = 'X';
             } else {
-                map[mapIndex]->obstacle = 'O';
+                *cell = 'O';
             }
         }
     }
+    writeToMap(map, mapSize);
 }
+void writeToMap(char ** map, int * map_size) {
+    FILE *fileMap = fopen("map/map.txt", "w");
+    if (!fileMap) {
+        perror("Failed to open file");
+        return;
+    }
+
+    char* flatMap = *map; // Dereference to get the actual map pointer
+    int elevation = 1;
+    for (int x = 0; x < *map_size; x++) {
+        for (int y = 0; y < *map_size; y++) {
+            fprintf(fileMap, "%c", flatMap[x * (*map_size) + y]); // Correct 1D indexing
+        }
+        fprintf(fileMap, "\n"); // Add newline after each row
+    }
+
+    fclose(fileMap);
+}
+
 
 char* getCell(char* map, int mapSize, int y, int x) { // getCell funktionen der returnerer en pointer til en char
     char* cell = map + mapSize * x + y;

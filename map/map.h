@@ -6,10 +6,11 @@
 #define MAP_H
 #include "../structs.h"
 
-
-void createMap(int* mapSize, struct Map* map[]);
-char* getCell(char* map, int mapSize, int y, int x);
+void createMap(int* mapSize, char** map);
 void printMap(char* map, int mapSize, struct deminer);
+void writeToMap(char ** map, int * map_size);
+
+char* getCell(char* map, int mapSize, int y, int x);
 
 
 

@@ -12,7 +12,7 @@
 int main(void) {
 
     int mapSize;
-    struct Map* map = NULL;
+    char* map = NULL;
 
     srand(time(NULL));
 
