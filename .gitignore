@@ -1,11 +1,11 @@
 
-cmake-build-debug/P1_Minefield.exe
-cmake-build-debug/map
-cmake-build-debug/CMakeFiles/P1_Minefield.dir/movement/movement.c.obj
-cmake-build-debug/CMakeFiles/P1_Minefield.dir/map/map.c.obj
-cmake-build-debug/CMakeFiles/P1_Minefield.dir/map/colour/colour.c.obj
-cmake-build-debug/CMakeFiles/P1_Minefield.dir/main.c.obj
-cmake-build-debug/.ninja_log
-cmake-build-debug/.ninja_deps
-cmake-build-debug/.cmake/api/v1/reply/target-P1_Minefield-Debug-f3e5a216f8f02bd7425f.json
 cmake-build-debug/.cmake/api/v1/reply/codemodel-v2-222136bb2788e332443d.json
+cmake-build-debug/.cmake/api/v1/reply/target-P1_Minefield-Debug-f3e5a216f8f02bd7425f.json
+cmake-build-debug/.ninja_deps
+cmake-build-debug/.ninja_log
+cmake-build-debug/CMakeFiles/P1_Minefield.dir/main.c.obj
+cmake-build-debug/CMakeFiles/P1_Minefield.dir/map/colour/colour.c.obj
+cmake-build-debug/CMakeFiles/P1_Minefield.dir/map/map.c.obj
+cmake-build-debug/CMakeFiles/P1_Minefield.dir/movement/movement.c.obj
+cmake-build-debug/map
+cmake-build-debug/P1_Minefield.exe
