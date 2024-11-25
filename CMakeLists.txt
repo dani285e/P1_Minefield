@@ -3,8 +3,8 @@ project(P1_Minefield C)
 
 set(CMAKE_C_STANDARD 11)
 
-add_library(mining_functions deminers.c blast_radius.c
-        deminers.h)
+add_library(mining_functions deminers/deminers.c "blast radius/Blast_Radius.c"
+        deminers/deminers.h)
 target_include_directories(mining_functions PUBLIC .)
 
 
