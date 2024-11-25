@@ -1,11 +1,62 @@
+@ -1,88 +0,0 @@
+# Prerequisites
+*.d
 
-cmake-build-debug/.cmake/api/v1/reply/codemodel-v2-222136bb2788e332443d.json
-cmake-build-debug/.cmake/api/v1/reply/target-P1_Minefield-Debug-f3e5a216f8f02bd7425f.json
-cmake-build-debug/.ninja_deps
-cmake-build-debug/.ninja_log
-cmake-build-debug/CMakeFiles/P1_Minefield.dir/main.c.obj
-cmake-build-debug/CMakeFiles/P1_Minefield.dir/map/colour/colour.c.obj
-cmake-build-debug/CMakeFiles/P1_Minefield.dir/map/map.c.obj
-cmake-build-debug/CMakeFiles/P1_Minefield.dir/movement/movement.c.obj
-cmake-build-debug/map
-cmake-build-debug/P1_Minefield.exe
+# Object files
+*.o
+*.ko
+*.obj
+*.elf
+
+# Linker output
+*.ilk
+*.map
+*.exp
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Libraries
+*.lib
+*.a
+*.la
+*.lo
+
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Executables
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
+
+# Debug files
+*.dSYM/
+*.su
+*.idb
+*.pdb
+
+# Kernel Module Compile Results
+*.mod*
+*.cmd
+.tmp_versions/
+modules.order
+Module.symvers
+Mkfile.old
+dkms.conf
+
+.idea
+cmake-build*
+build/
+cmake-build-debug/.
+.idea/editor.xml
+
+cmake-install.cmake
+cmake-build-debug/.cmake/api/v1/reply/cache-v2-ed351eeb74d2e0de62fe.json
