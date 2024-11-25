@@ -1,5 +1,5 @@
 #define MINES 20
-#define HILLS 3
+
 #define PATH_SYMBOL 'P'
 #define BLANK_SYMBOL 'O'
 #define OBSTACLE_SYMBOL 'X'

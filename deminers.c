@@ -3,11 +3,13 @@
 #include <time.h>
 
 #include "deminers.h"
+#include "terrain.h"
+
+
 
 int deminer() { //this is a replacement for the fake int main(void) function that was here previously, runs the rest of the file - call it w/e or write it out
 
     int mapSize;
-
 
     char* map = NULL;
 
@@ -119,18 +121,18 @@ void create_elevation_map(int mapSize, char** elevation_map) {
     for (int y = 0; y < mapSize; y++) {
         // Nested for loop der kører igennem alle pladser i 2D arrayet
         for (int x = 0; x < mapSize; x++) {
-            char *cell = getCell(elevation_map, mapSize, y, x);
             if ( *cell == HILL_SYMBOL) {
-                upper_left = *getCell(elevation_map, mapSize, y-1, x-1);
-                *upper_left = LESS_ELEVATION_SYMBOL; //top left corner
-                elevation_map[y-1][x]   = LESS_ELEVATION_SYMBOL;
-                elevation_map[y-1][x+1] = LESS_ELEVATION_SYMBOL;
-                elevation_map[y][x-1]   = LESS_ELEVATION_SYMBOL;
-                elevation_map[y][x]     = LESS_ELEVATION_SYMBOL;
-                elevation_map[y][x+1]   = LESS_ELEVATION_SYMBOL;
-                elevation_map[y+1][x-1] = LESS_ELEVATION_SYMBOL;
-                elevation_map[y+1][x]   = LESS_ELEVATION_SYMBOL;
-                elevation_map[y+1][x+1] = LESS_ELEVATION_SYMBOL;
+                upper_left = getCell(*elevation_map, mapSize, y, x);
+                *upper_left = LESS_ELEVATION_SYMBOL;
+                elevation_map[x-1][y-1] = LESS_ELEVATION_SYMBOL;
+                elevation_map[x-1][y]   = LESS_ELEVATION_SYMBOL;
+                elevation_map[x-1][y+1] = LESS_ELEVATION_SYMBOL;
+                elevation_map[x][y-1]   = LESS_ELEVATION_SYMBOL;
+                elevation_map[x][y]     = LESS_ELEVATION_SYMBOL;
+                elevation_map[x][y+1]   = LESS_ELEVATION_SYMBOL;
+                elevation_map[x+1][y-1] = LESS_ELEVATION_SYMBOL;
+                elevation_map[x+1][y]   = LESS_ELEVATION_SYMBOL;
+                elevation_map[x+1][y+1] = LESS_ELEVATION_SYMBOL;
             }
         }
     }
