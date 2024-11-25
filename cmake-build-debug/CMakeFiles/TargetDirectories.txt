@@ -1,5 +1,3 @@
-/Users/mathiaskiel/CLionProjects/P1_Minefield/cmake-build-debug/CMakeFiles/P1_Minefield.dir
-/Users/mathiaskiel/CLionProjects/P1_Minefield/cmake-build-debug/CMakeFiles/Blast_Radius.dir
-/Users/mathiaskiel/CLionProjects/P1_Minefield/cmake-build-debug/CMakeFiles/Blast_Radius_Mia.dir
-/Users/mathiaskiel/CLionProjects/P1_Minefield/cmake-build-debug/CMakeFiles/edit_cache.dir
-/Users/mathiaskiel/CLionProjects/P1_Minefield/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+D:/Projecter/P1_Minefield/cmake-build-debug/CMakeFiles/P1_Minefield.dir
+D:/Projecter/P1_Minefield/cmake-build-debug/CMakeFiles/edit_cache.dir
+D:/Projecter/P1_Minefield/cmake-build-debug/CMakeFiles/rebuild_cache.dir
