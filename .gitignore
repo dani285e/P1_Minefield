@@ -1,3 +1,4 @@
+@ -1,88 +0,0 @@
 # Prerequisites
 *.d
 
@@ -54,3 +55,8 @@ dkms.conf
 .idea
 cmake-build*
 build/
+cmake-build-debug/.
+.idea/editor.xml
+
+cmake-install.cmake
+cmake-build-debug/.cmake/api/v1/reply/cache-v2-ed351eeb74d2e0de62fe.json

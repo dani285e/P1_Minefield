@@ -9,5 +9,14 @@ add_library(mining_functions deminers.c blast_radius.c
         terrain.c)
 target_include_directories(mining_functions PUBLIC .)
 
-add_executable(P1_Minefield main.c)
+
+add_executable(P1_Minefield main.c
+        map/colour/colour.c
+        map/colour/colour.h
+        movement/movement.c
+        movement/movement.h
+        map/map.c
+        map/map.h
+        structs.h
+)
 target_link_libraries(P1_Minefield mining_functions)
