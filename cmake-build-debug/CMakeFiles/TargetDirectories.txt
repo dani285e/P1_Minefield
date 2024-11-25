@@ -1,4 +1,4 @@
-C:/Users/saraf/Desktop/AAU CODE/P1/P1_Minefield/cmake-build-debug/CMakeFiles/mining_functions.dir
-C:/Users/saraf/Desktop/AAU CODE/P1/P1_Minefield/cmake-build-debug/CMakeFiles/P1_Minefield.dir
-C:/Users/saraf/Desktop/AAU CODE/P1/P1_Minefield/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/saraf/Desktop/AAU CODE/P1/P1_Minefield/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+C:/Users/Bruger/CLionProjects/P1_Minefield/cmake-build-debug/CMakeFiles/mining_functions.dir
+C:/Users/Bruger/CLionProjects/P1_Minefield/cmake-build-debug/CMakeFiles/P1_Minefield.dir
+C:/Users/Bruger/CLionProjects/P1_Minefield/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/Bruger/CLionProjects/P1_Minefield/cmake-build-debug/CMakeFiles/rebuild_cache.dir
