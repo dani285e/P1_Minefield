@@ -6,6 +6,8 @@
 #include "colour/colour.h"
 #include <stdio.h>
 #include <stdlib.h>
+
+#include "deminers.h"
 #define MINES 20
 
 #define OBSTACLE_NONE 0
@@ -17,7 +19,7 @@
 // Funktion der genererer en arena
 void createMap(int* mapSize, char** map, Deminer deminer) {
     char* cell; // Cell er en pointer til en char
-    int mapSizetemp = (rand()% 30) + 10;
+    int mapSizetemp = 10; //(rand()% 30) + 10;
     *mapSize = mapSizetemp;
     //printf("Please enter a map size\n");
     //scanf("%d", &mapSizetemp);
@@ -29,11 +31,11 @@ void createMap(int* mapSize, char** map, Deminer deminer) {
             int outcome = (rand() % MINES) + 1;
             cell = getCell(*map, mapSizetemp, x, y); // Sætter cell pointeren lig med den pointer vi får tilbage af getCell funktionen
             if(outcome == 1) {
-                *cell = 'M';
+                *cell = MINE_SYMBOL;
             } else if (outcome > 1 && outcome < 5) {
-                *cell = 'X';
+                *cell = OBSTACLE_SYMBOL;
             } else {
-                *cell = 'O';
+                *cell = BLANK_SYMBOL;
             }
         }
     }
@@ -73,16 +75,29 @@ void printMap(char* map, int mapSize, Deminer deminer) { // printMap funktionen 
                 printf("%2c", 'P');
                 reset();
             } else {
-                if (*getCell(map, mapSize, y, x) == 'M') {
+                if (*getCell(map, mapSize, y, x) == MINE_SYMBOL) {
                     red();
                     printf("%2c", *getCell(map, mapSize, y, x));
                     reset();
                     mineCounter++;
-                } else if (*getCell(map, mapSize, y, x) == 'X') {
+                } else if (*getCell(map, mapSize, y, x) == OBSTACLE_SYMBOL) {
                     yellow();
                     printf("%2c", *getCell(map, mapSize, y, x));
                     reset();
-                } else {
+                } else if (*getCell(map, mapSize, y, x) == PATH_SYMBOL) {
+                    purple();
+                    printf("%2c", *getCell(map, mapSize, y,x));
+                    reset();
+                } else if (*getCell(map, mapSize, y, x) == HILL_SYMBOL) {
+                    red();
+                    printf("%2c", *getCell(map, mapSize, y,x));
+                    reset();
+                } else if (*getCell(map, mapSize, y, x) == LESS_ELEVATION_SYMBOL) {
+                    yellow();
+                    printf("%2c", *getCell(map, mapSize, y,x));
+                    reset();
+                }
+                else {
                     green();
                     printf("%2c", *getCell(map, mapSize, y, x)); // Udskriver den værdi der ligger på hver plads i 2D arrayet
                     reset();

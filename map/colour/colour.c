@@ -17,6 +17,10 @@ void blue() {
     printf("\033[0;34m");
 }
 
+void purple() {
+    printf("\033[0;35m");
+}
+
 void reset() {
     printf("\033[0m");
 }

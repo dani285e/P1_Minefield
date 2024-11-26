@@ -8,7 +8,7 @@
 
 int deminer() {
 
-    int mapSize;
+    int mapSize = 10;
     Deminer deminer = {};
 
     char* map = NULL;
@@ -34,7 +34,6 @@ int deminer() {
     printMap(elevation, mapSize, deminer);
 
     printf("it takes %lf minutes to walk the route", total_time(map, mapSize, temp_route, elevation));
-
 
     free(map);
     free(temp_route);
@@ -122,6 +121,7 @@ double total_time(char* map, int mapSize, char* route, char* elevation) {
     for (int y = 0; y < mapSize; ++y) {
         for (int x = 0; x < mapSize; ++x) {
             time_sum += cell_time(map, mapSize, route, elevation, y, x);
+            //printf("cell time: %lf\n", time_sum); //shows updated time for each cell
         }
     }
     return time_sum;
