@@ -3,6 +3,11 @@ project(P1_Minefield C)
 
 set(CMAKE_C_STANDARD 11)
 
+add_library(mining_functions deminers/deminers.c "blast radius/Blast_Radius.c"
+        deminers/deminers.h)
+target_include_directories(mining_functions PUBLIC .)
+
+
 add_executable(P1_Minefield main.c
         map/colour/colour.c
         map/colour/colour.h
@@ -12,3 +17,4 @@ add_executable(P1_Minefield main.c
         map/map.h
         structs.h
 )
+target_link_libraries(P1_Minefield mining_functions)
