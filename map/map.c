@@ -93,8 +93,10 @@ void printMap(char* map, int mapSize, Deminer deminer) { // printMap funktionen 
     }
 
     printf("\n\n");
-    printf("There is a total of %d mines there needs to be cleared\n", mineCounter);
-    printf("They are located at the following points\n");
+    if (mineCounter > 0) {
+        printf("There is a total of %d mines there needs to be cleared\n", mineCounter);
+        printf("They are located at the following points\n");
+    }
     int counter = 0;
     for(int y = 0; y < mapSize; y++) {
         for (int x = 0; x < mapSize; x++) {

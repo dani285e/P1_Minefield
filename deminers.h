@@ -1,6 +1,7 @@
 #define MINES 20
+#define HILLS 5
 
-#define PATH_SYMBOL 'P'
+#define PATH_SYMBOL '#'
 #define BLANK_SYMBOL 'O'
 #define OBSTACLE_SYMBOL 'X'
 #define MINE_SYMBOL 'M'
@@ -10,15 +11,7 @@
 #define DEMINING_TIME 10 //assumption it takes 10 minutes to demine 1 mine
 #define BLANK 1 //assumption it takes 1 minutes to walk across empty field
 #define OBSTACLE 3 //assumption it takes 3 minutes to walk around field with obstacle
-/*
-void createMap(int* mapSize, char** map);
-char* getCell(char* map, int mapSize, int y, int x);
-void printMap(char* map, int mapSize);
-void red();
-void reset();
-void yellow();
-void green();
-*/
+
 int get_deminers(char* map, int mapSize); //takes map size and amount of mines to calculate deminers needed
 int is_mine(char* map, int mapSize, int y, int x); //checks boolean if cell is mine
 

@@ -3,6 +3,26 @@
 #include "terrain.h"
 #include "map/map.h"
 
+// Funktion der genererer en arena
+void create_elevation_map(int mapSize, char** elevation_map) {
+    char* cell; // Cell er en pointer til en char
+    *elevation_map = (char*)malloc(mapSize*mapSize*sizeof(char));
+
+    for (int y = 0; y < mapSize; y++) {
+        // Nested for loop der kører igennem alle pladser i 2D arrayet
+        for (int x = 0; x < mapSize; x++) {
+            int outcome = (rand() % mapSize) + 1;
+            cell = getCell(*elevation_map, mapSize, y, x); // Sætter cell pointeren lig med den pointer vi får tilbage af getCell funktionen
+            if(outcome == 1) {
+                *cell = HILL_SYMBOL;
+            } else { //only path symbol for as big as map size
+                for (int i = 0; i < mapSize; ++i) {
+                    *cell = BLANK_SYMBOL;
+                }
+            }
+        }
+    }
+}
 
 // Funktion, der opdatere mappet
 void update_map (char* map, int mapSize) {
@@ -44,23 +64,4 @@ void update_Surrounding_Cells(char* map, int mapSize, int y, int x, char newVal)
 }
 
 
-// Funktion der genererer en arena
-void create_elevation_map(int mapSize, char** elevation_map) {
-    char* cell; // Cell er en pointer til en char
-    *elevation_map = (char*)malloc(mapSize*mapSize*sizeof(char));
 
-    for (int y = 0; y < mapSize; y++) {
-        // Nested for loop der kører igennem alle pladser i 2D arrayet
-        for (int x = 0; x < mapSize; x++) {
-            int outcome = (rand() % mapSize) + 1;
-            cell = getCell(*elevation_map, mapSize, y, x); // Sætter cell pointeren lig med den pointer vi får tilbage af getCell funktionen
-            if(outcome == 1) {
-                *cell = HILL_SYMBOL;
-            } else { //only path symbol for as big as map size
-                for (int i = 0; i < mapSize; ++i) {
-                    *cell = BLANK_SYMBOL;
-                }
-            }
-        }
-    }
-}
