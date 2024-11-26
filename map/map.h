@@ -6,8 +6,8 @@
 #define MAP_H
 #include "../structs.h"
 
-void createMap(int* mapSize, char** map);
-void printMap(char* map, int mapSize, struct deminer);
+void createMap(int* mapSize, char** map, Deminer deminer);
+void printMap(char* map, int mapSize, Deminer deminer);
 void writeToMap(char ** map, int * map_size);
 
 char* getCell(char* map, int mapSize, int y, int x);

@@ -15,7 +15,7 @@
 
 
 // Funktion der genererer en arena
-void createMap(int* mapSize, char** map) {
+void createMap(int* mapSize, char** map, Deminer deminer) {
     char* cell; // Cell er en pointer til en char
     int mapSizetemp = (rand()% 30) + 10;
     *mapSize = mapSizetemp;

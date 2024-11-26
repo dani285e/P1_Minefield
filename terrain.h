@@ -1,21 +1,13 @@
+#include <stdio.h>
+#include <stdlib.h>
 
-#define TERRAIN_COUNT 5
-
-
-typedef struct Point_s {
-    int x;
-    int y;
-    int PointID;
-} Point;
-
-typedef struct Area_s {
-    int x;
-    int y;
-    int AreaID;
-} Area;
+#include "deminers.h"
 
 
-Area terrain_coordinate(int y, int x, int id);
-Area terrain_radius(int terrain_count, Area* terrain);
+void update_map (char* map, int mapSize);
+void update_Surrounding_Cells(char* map, int mapSize, int y, int x, char newVal);
+void create_elevation_map(int mapSize, char** map);
+
+
 
 

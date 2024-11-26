@@ -4,12 +4,14 @@
 
 #include "deminers.h"
 #include "terrain.h"
+#include "map/map.h"
 
 
 
 int deminer() { //this is a replacement for the fake int main(void) function that was here previously, runs the rest of the file - call it w/e or write it out
 
     int mapSize;
+    Deminer deminer = {};
 
     char* map = NULL;
 
@@ -18,30 +20,20 @@ int deminer() { //this is a replacement for the fake int main(void) function tha
 
     srand(time(NULL));
 
-    createMap(&mapSize, &map);
-    printMap(map, mapSize);
+    createMap(&mapSize, &map, deminer);
+    printMap(map, mapSize, deminer);
 
     int deminers = get_deminers(map, mapSize);
     printf("Deminers needed: %d\n", deminers);
 
-    int y = 4;
-    int x = 5;
-    switch (is_mine(map, mapSize, y, x)) {
-        case (1): printf("there is a mine at: %d,%d\n", x, y);
-            break;
-        case (0): printf("there is NOT a mine at: %d,%d\n", x, y);
-            break;
-        default: printf("pardon?");
-    }
-
     create_temproute(mapSize, &temp_route);
-    printMap(temp_route, mapSize);
+    printMap(temp_route, mapSize, deminer);
 
-    create_elevation_map(mapSize,&elevation);
-    printMap(elevation, mapSize);
+    create_elevation_map(mapSize, &elevation);
+    //update_map(elevation, mapSize);
+    //printMap(elevation, mapSize);
 
     printf("it takes %lf minutes to walk the route", total_time(map, mapSize, temp_route, elevation));
-
 
 
     free(map);
@@ -52,9 +44,9 @@ int deminer() { //this is a replacement for the fake int main(void) function tha
 }
 
 // Funktion der genererer en arena
-void createMap(int* mapSize, char** map) {
+/*void createMap(int* mapSize, char** map) {
     char* cell; // Cell er en pointer til en char
-    int mapSizetemp = (rand()% 20) + 10;;
+    int mapSizetemp = (rand()% 20) + 10;
     *mapSize = mapSizetemp;
     //printf("Please enter a map size\n");
     //scanf("%d", &mapSizetemp);
@@ -74,7 +66,7 @@ void createMap(int* mapSize, char** map) {
             }
         }
     }
-}
+}*/
 
 void create_temproute(int mapSize, char** temp_route) {
     //char* cell; // Cell er en pointer til en char
@@ -98,47 +90,7 @@ void create_temproute(int mapSize, char** temp_route) {
     }
 }
 
-void create_elevation_map(int mapSize, char** elevation_map) {
-    char* cell; // Cell er en pointer til en char
-    *elevation_map = (char*)malloc(mapSize*mapSize*sizeof(char));
-
-    for (int y = 0; y < mapSize; y++) { // Nested for loop der kører igennem alle pladser i 2D arrayet
-        for (int x = 0; x < mapSize; x++) {
-            int outcome = (rand() % mapSize) + 1;
-            cell = getCell(*elevation_map, mapSize, y, x); // Sætter cell pointeren lig med den pointer vi får tilbage af getCell funktionen
-            if(outcome == 1) {
-                *cell = HILL_SYMBOL;
-            } else { //only path symbol for as big as map size
-                for (int i = 0; i < mapSize; ++i) {
-                    *cell = BLANK_SYMBOL;
-                }
-            }
-        }
-    }
-
-    char* upper_left;
-
-    for (int y = 0; y < mapSize; y++) {
-        // Nested for loop der kører igennem alle pladser i 2D arrayet
-        for (int x = 0; x < mapSize; x++) {
-            if ( *cell == HILL_SYMBOL) {
-                upper_left = getCell(*elevation_map, mapSize, y, x);
-                *upper_left = LESS_ELEVATION_SYMBOL;
-                elevation_map[x-1][y-1] = LESS_ELEVATION_SYMBOL;
-                elevation_map[x-1][y]   = LESS_ELEVATION_SYMBOL;
-                elevation_map[x-1][y+1] = LESS_ELEVATION_SYMBOL;
-                elevation_map[x][y-1]   = LESS_ELEVATION_SYMBOL;
-                elevation_map[x][y]     = LESS_ELEVATION_SYMBOL;
-                elevation_map[x][y+1]   = LESS_ELEVATION_SYMBOL;
-                elevation_map[x+1][y-1] = LESS_ELEVATION_SYMBOL;
-                elevation_map[x+1][y]   = LESS_ELEVATION_SYMBOL;
-                elevation_map[x+1][y+1] = LESS_ELEVATION_SYMBOL;
-            }
-        }
-    }
-
-}
-
+/*
 char* getCell(char* map, int mapSize, int y, int x) { // getCell funktionen der returnerer en pointer til en char
     char* cell = map + mapSize * x + y;
     return cell;
@@ -195,7 +147,7 @@ void reset() {
 void yellow() {
     printf("\033[0;33m");
 }
-
+*/
 int get_deminers(char* map, int mapSize) {
     int mineCounter = 0;
     for (int y = 0; y < mapSize; y++) {
@@ -206,19 +158,37 @@ int get_deminers(char* map, int mapSize) {
         }
     }
 
-    //deminer count is map size divded by 5 and mine amount divdied by 5, which is a constant
-    // so that the amount of deminers is dependent on map size and mine amount.
-    // meaning 1 deminers for each 5 unit of area and 1 deminer for 5 mines
-    int deminer_count = (mapSize/5) + (mineCounter/5) ;
+    int deminer_count;
+    int size_deminers;
+    int mines_deminers;
+
+    //if mapsize and minecounter is small, only one deminer is needed
+    if (mapSize < 20 || mineCounter < 5) {
+        deminer_count = 1;
+    }
+    //switch for deminers needed proportional to size
+    switch (mapSize) {
+        case 20: size_deminers = 2;
+        case 30: size_deminers = 3;
+        default: size_deminers = 1;
+    }
+    //switch for deminers needed proportional to mine counter values
+    switch (mineCounter) {
+        case 5: mines_deminers = 2;
+            break;
+        case 10: mines_deminers = 3;
+            break;
+    }
+
+    //returns which variable is biggest
+    if (mines_deminers < size_deminers) {
+        return size_deminers;
+    }
+    if (mines_deminers > size_deminers) {
+        return mines_deminers;
+    }
 
     return deminer_count;
-}
-
-int is_mine(char* map, int mapSize, int y, int x) {
-    if (*getCell(map, mapSize, y, x) == 'M') {
-        return 1;
-    }
-    return 0;
 }
 
 

@@ -1,73 +1,66 @@
 
 
 #include "terrain.h"
+#include "map/map.h"
 
 
-/*
-struct for terrain
-terrain types update around the map
-randomly generated
-then translate struct map in the time for the terrain.ID = yes,
-* --------------------*/
-
-
-int terrain_function() {
-
-int terrain_count = TERRAIN_COUNT; // Midlertidig antal
-int terrain_x;
-int terrain_y;
-Area terrains_arr[terrain_count]; // Laver en array mines[mine_count] af structen Mines
-
-for(int i = 0; i < terrain_count; i++) {  // Tæller op i et loop, hvor mange mine_x og mine_y værdier, der skal være samt hvor mange mineID der skal være
-    terrain_x = i;
-    terrain_y = i;
-    terrains_arr[i].x = terrain_x; // Tilkobler arrayet med structen og giver værdien "x" værdien "mine_x"
-    terrains_arr[i].y = terrain_y; // Samme som ovenover bare med y
-    terrains_arr[i].TerrainID = i; // Samme som ovenover bare med mineID
-}
-
-hill_radius(hill_count, hills); // Kalder blast_radius funktionen
-return 0;
-}
-
-
-Terrain terrain_coordinate(int y, int x, int id){
-        Terrain terrain; // Definerer en blast ud fra structen Blast
-        terrain.y = y; // Tildeler blast y værdien i structen Blast
-        terrain.x = x; // Tildeler blast x værdien i structen Blast
-        terrain.TerrainID = id; // Tildeler blast mineID i structen Blast
-        return terrain;
-}
-
-
-Terrain terrain_radius(int terrain_count, Terrain * terrain) {
-     *blast = malloc(sizeof(Hill) * hill_count * 7);
-    if (hills == NULL) {
-        printf("Failed to allocate memory");
-        exit(EXIT_FAILURE);
-    }
-    int hill_index = 0;  // Blast index er hvilket felt den er nået til. Den starter i felt 0
-
-    for (int i = 0; i < hill_count; i++) {   // Den tæller, hvor mange miner der er. Den starter ved 0 og tæller op
-        for (int j = 0; j < 7; j++) { // Den tæller, hvor mange felter i arrayet omrking minen, som skal kategoriseres som radius
-            int temporary_y = hills[i].y; // Tilføjer temporary values for ikke at ændre i den originale struct
-            int temporary_x = hills[i].x;
-            blast[i] = hill_coordinate(temporary_y, temporary_x, hills[i].hillID);
-            blast[hill_index] = hill_coordinate(temporary_y--, temporary_x, hills[i].hillID); // Under minen
-            hill_index++; // Tæller op for hver gang den har været i en bestemt del af arrayet, så den ikke kategoriserer det samme felt 2 gange
-            blast[hill_index] = hill_coordinate(temporary_y, temporary_x++, hills[i].hillID); // Til højre for minen
-            hill_index++;
-            blast[hill_index] = hill_coordinate(temporary_y++, temporary_x++, hills[i].hillID); // Højre skrå hjørne
-            hill_index++;
-            blast[hill_index] = hill_coordinate(temporary_y++, temporary_x, hills[i].hillID); // Over minen
-            hill_index++;
-            blast[hill_index] = hill_coordinate(temporary_y, temporary_x--, hills[i].hillID); // Til venstre for minen
-            hill_index++;
-            blast[hill_index] = hill_coordinate(temporary_y--, temporary_x--, hills[i].hillID); // Venstre nederste hjørne
+// Funktion, der opdatere mappet
+void update_map (char* map, int mapSize) {
+    // Loop, der kører igennem arrayet(map)
+    for (int x = 0; x < mapSize; x++) {
+        for (int y = 0; y < mapSize; y++) {
+            // Kalder funktionen update_sorrounding_cells, hvis det enkelte element/celle er B
+            if (*getCell(map, mapSize, y, x) == 'B') {
+                update_Surrounding_Cells(map, mapSize, y, x, LESS_ELEVATION_SYMBOL);
+            }
         }
     }
-
-    free(hills);
-    return hills[0];
 }
 
+void update_Surrounding_Cells(char* map, int mapSize, int y, int x, char newVal) {
+    int directions[8][2] = { // De 8 retninger omkring en celle
+        {-1, -1}, {-1, 0},{-1, 1}, // Øverst venstre, op, øverst højre
+        {0, -1},            {0, 1},  // Venstre, højre
+        {1, -1}, {1, 0}, {1, 1}    // Nederst venstre, ned, nederst højre
+    };
+
+    // Kører igennem for hvert eneste koordinat rundt om 'B'
+    for (int i = 0; i < 8; i++) {
+
+        // Giver et tal til begge int typer
+        int ny = y + directions[i][0];
+        int nx = x + directions[i][1];
+
+        // Tjek om naboen er inden for kortets grænser
+        if (ny >= 0 && ny < mapSize && nx >= 0 && nx < mapSize) {
+            // Tager cellen i arrayet for de omkringliggende elementer
+            char* cell = getCell(map, mapSize, ny, nx);
+            // Overskriver de omkringliggende elementer til ny værdi, hvis ikke det er char værdierne 'B' og 'M'
+            if (*cell != 'B') { // Undgå at overskrive en bakke
+                *cell = newVal;
+            }
+        }
+    }
+}
+
+
+// Funktion der genererer en arena
+void create_elevation_map(int mapSize, char** elevation_map) {
+    char* cell; // Cell er en pointer til en char
+    *elevation_map = (char*)malloc(mapSize*mapSize*sizeof(char));
+
+    for (int y = 0; y < mapSize; y++) {
+        // Nested for loop der kører igennem alle pladser i 2D arrayet
+        for (int x = 0; x < mapSize; x++) {
+            int outcome = (rand() % mapSize) + 1;
+            cell = getCell(*elevation_map, mapSize, y, x); // Sætter cell pointeren lig med den pointer vi får tilbage af getCell funktionen
+            if(outcome == 1) {
+                *cell = HILL_SYMBOL;
+            } else { //only path symbol for as big as map size
+                for (int i = 0; i < mapSize; ++i) {
+                    *cell = BLANK_SYMBOL;
+                }
+            }
+        }
+    }
+}

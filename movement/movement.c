@@ -3,6 +3,7 @@
 //
 
 #include "movement.h"
+#include "map/map.h"
 #include <stdio.h>
 
 void move_up(Deminer *deminer) {
