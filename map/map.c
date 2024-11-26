@@ -1,107 +1,139 @@
-//
-// Created by Danie on 20-11-2024.
-//
-
-#include "map.h"
-#include "colour/colour.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
+
 #define MINES 20
 
-#define OBSTACLE_NONE 0
-#define OBSTACLE_TREE 1
-#define OBSTACLE_HILL 2
-#define OBSTACLE_STONE 3
+enum point_value {
+    Clear, Obstacle, Mine};
+
+char point_value_name[3] = {'O', 'X', 'M'};
+
+typedef struct {
+    int point_value_x;
+    int point_value_y;
+    enum point_value point_value;
+} mapPoint;
+
+mapPoint* get_cell(mapPoint* map, int mapSize, int y, int x);
+void create_map(int mapSize, mapPoint* map);
+void print_map(int mapSize, mapPoint* map);
+void check_a_point(int mapSize, mapPoint* map);
+void red();
+void green();
+void reset();
+void yellow();
+
+int main(void) {
+
+    srand(time(NULL));
+
+    mapPoint* map = NULL;
+    int mapSize = (rand()% 20) + 10;
+    map = (mapPoint*)malloc(sizeof(mapPoint)*mapSize*mapSize);
+    //mapPoint map[1000][1];
+
+    create_map(mapSize, map);
+    print_map(mapSize, map);
+    check_a_point(mapSize, map);
 
 
-// Funktion der genererer en arena
-void createMap(int* mapSize, char** map) {
-    char* cell; // Cell er en pointer til en char
-    int mapSizetemp = (rand()% 30) + 10;
-    *mapSize = mapSizetemp;
-    //printf("Please enter a map size\n");
-    //scanf("%d", &mapSizetemp);
-    printf("Map size is: %d\n", mapSizetemp);
-    *map = (char*)malloc(mapSizetemp*mapSizetemp*sizeof(char));
+    free(map);
+    map = NULL;
 
-    for (int x = 0; x < mapSizetemp; x++) { // Nested for loop der kører igennem alle pladser i 2D arrayet
-        for (int y = 0; y < mapSizetemp; y++) {
-            int outcome = (rand() % MINES) + 1;
-            cell = getCell(*map, mapSizetemp, x, y); // Sætter cell pointeren lig med den pointer vi får tilbage af getCell funktionen
-            if(outcome == 1) {
-                *cell = 'M';
-            } else if (outcome > 1 && outcome < 5) {
-                *cell = 'X';
-            } else {
-                *cell = 'O';
-            }
-        }
-    }
-    writeToMap(map, mapSize);
-}
-void writeToMap(char ** map, int * map_size) {
-    FILE *fileMap = fopen("map/map.txt", "w");
-    if (!fileMap) {
-        perror("Failed to open file");
-        return;
-    }
-
-    char* flatMap = *map; // Dereference to get the actual map pointer
-    int elevation = 1;
-    for (int x = 0; x < *map_size; x++) {
-        for (int y = 0; y < *map_size; y++) {
-            fprintf(fileMap, "%c", flatMap[x * (*map_size) + y]); // Correct 1D indexing
-        }
-        fprintf(fileMap, "\n"); // Add newline after each row
-    }
-
-    fclose(fileMap);
+    return 0;
 }
 
-
-char* getCell(char* map, int mapSize, int y, int x) { // getCell funktionen der returnerer en pointer til en char
-    char* cell = map + mapSize * x + y;
+mapPoint* get_cell(mapPoint* map, int mapSize, int y, int x) {
+    mapPoint* cell = map + mapSize * y + x;
     return cell;
 }
 
-void printMap(char* map, int mapSize, Deminer deminer) { // printMap funktionen udskriver alle elementer i 2D arrayet
+void create_map(int mapSize, mapPoint* map) {
+    mapPoint* cell;
+
+    for (int y = 0; y < mapSize; y++) {
+        for (int x = 0; x < mapSize; x++) {
+            int outcome = (rand() % MINES) + 1;
+            cell = get_cell(map, mapSize, y, x);
+            if(outcome == 1) {
+                cell->point_value = Mine;
+
+            } else if (outcome > 1 && outcome < 5) {
+                cell->point_value = Obstacle;
+            } else {
+                cell->point_value = Clear;
+            }
+            cell->point_value_x = x;
+            cell->point_value_y = y;
+        }
+    }
+
+}
+
+void print_map(int mapSize, mapPoint* map) {
     int mineCounter = 0;
     for (int y = 0; y < mapSize; y++) {
         for (int x = 0; x < mapSize; x++) {
-            if (y == deminer.y && x == deminer.x) {
-                blue();
-                printf("%2c", 'P');
+            if (get_cell(map, mapSize, y, x)->point_value == Mine) {
+                red();
+                printf("%3c", point_value_name[Mine]);
+                reset();
+                mineCounter++;
+            } else if (get_cell(map, mapSize, y, x)->point_value == Obstacle) {
+                yellow();
+                printf("%3c", point_value_name[Obstacle]);
                 reset();
             } else {
-                if (*getCell(map, mapSize, y, x) == 'M') {
-                    red();
-                    printf("%2c", *getCell(map, mapSize, y, x));
-                    reset();
-                    mineCounter++;
-                } else if (*getCell(map, mapSize, y, x) == 'X') {
-                    yellow();
-                    printf("%2c", *getCell(map, mapSize, y, x));
-                    reset();
-                } else {
-                    green();
-                    printf("%2c", *getCell(map, mapSize, y, x)); // Udskriver den værdi der ligger på hver plads i 2D arrayet
-                    reset();
-                }
+                green();
+                printf("%3c", point_value_name[Clear]);
+                reset();
             }
         }
         printf("\n");
     }
-
-    printf("\n\n");
-    printf("There is a total of %d mines there needs to be cleared\n", mineCounter);
+    printf("\n\n\n");
+    printf("There is a total of %d mines there needs to be cleared\n\n", mineCounter);
     printf("They are located at the following points\n");
     int counter = 0;
     for(int y = 0; y < mapSize; y++) {
         for (int x = 0; x < mapSize; x++) {
-            if (*getCell(map, mapSize, y, x) == 'M') {
+            if (get_cell(map, mapSize, y, x)->point_value == Mine) {
                 counter = counter + 1;
-                printf("%-2d Mine: X = %-2d, Y = %d\n", counter, x, y);
+                printf("Mine %-2d is located at point X = %-2d, Y = %d\n", counter, x, y);
             }
         }
     }
+}
+
+void check_a_point(int mapSize, mapPoint* map) {
+    int current_x;
+    int current_y;
+    printf("\nCheck the value at a certain point by entering a X and Y coordinate\n");
+    scanf("%d", &current_x);
+    scanf("%d", &current_y);
+    if(current_x < 0 || current_x >= mapSize || current_y < 0 || current_y >= mapSize) {
+        printf("Cant access a point is outside of the map\n");
+    } else {
+        printf("At point X:%d, Y:%d there is located %c",
+        get_cell(map, mapSize, current_y, current_x)->point_value_x,
+        get_cell(map, mapSize, current_y, current_x)->point_value_y,
+        point_value_name[get_cell(map, mapSize, current_y, current_x)->point_value]);
+    }
+}
+
+void red() {
+    printf("\033[0;31m");
+}
+
+void green() {
+    printf("\033[0;32m");
+}
+
+void reset() {
+    printf("\033[0m");
+}
+
+void yellow() {
+    printf("\033[0;33m");
 }
