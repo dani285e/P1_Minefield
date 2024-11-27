@@ -5,6 +5,6 @@
 -- Check for working C compiler: C:/Users/Bruger/AppData/Local/JetBrains/CLion 2024.2.1/bin/mingw/bin/gcc.exe - skipped
 -- Detecting C compile features
 -- Detecting C compile features - done
--- Configuring done (1.9s)
+-- Configuring done (1.8s)
 -- Generating done (0.1s)
 -- Build files have been written to: C:/Users/Bruger/CLionProjects/P1_Minefield/cmake-build-debug
