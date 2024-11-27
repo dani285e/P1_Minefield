@@ -6,7 +6,7 @@
 
 #ifndef MOVEMENT_H
 #define MOVEMENT_H
-#include "../structs.h"
+#include "src/structs.h"
 
 
 

@@ -5,6 +5,8 @@
 #include "movement.h"
 #include <stdio.h>
 
+
+
 void move_up(Deminer *deminer) {
     deminer->y++;
 }
@@ -43,13 +45,13 @@ void move(Deminer *deminer, int direction) {
     }
 }
 
-void movePlayer(Deminer * mine_remover, int mapSize, char *map) {
-    move(mine_remover, 2);
-    printMap(map, mapSize, *mine_remover);
-    move(mine_remover, 3);
-    printMap(map, mapSize, *mine_remover);
-    move(mine_remover, 4);
-    printMap(map, mapSize, *mine_remover);
-    move(mine_remover, 1);
-    printMap(map, mapSize, *mine_remover);
-}
+// void movePlayer(Deminer * mine_remover, int mapSize, char *map) {
+//     move(mine_remover, 2);
+//     printMap(map, mapSize, *mine_remover);
+//     move(mine_remover, 3);
+//     printMap(map, mapSize, *mine_remover);
+//     move(mine_remover, 4);
+//     printMap(map, mapSize, *mine_remover);
+//     move(mine_remover, 1);
+//     printMap(map, mapSize, *mine_remover);
+// }

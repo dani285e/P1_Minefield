@@ -1,8 +1,5 @@
-#include <stdio.h>
-
-#include "deminers/deminers.h"
+#include "src//deminers/deminers.h"
 
 int main(void) {
-
     deminer();
 }
