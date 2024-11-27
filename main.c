@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "deminers.h"
+#include "deminers/deminers.h"
 
 int main(void) {
 
