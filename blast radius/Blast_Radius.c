@@ -2,95 +2,169 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <time.h>
+
 #define BLAST 1
 #define MINE_COUNT 5
 #define TRUE 1
 #define FALSE 0
-#define ACTIVE_MINERS 5
+#define MINES 20
 
-// En funktion der skal være aktiv i programmet, hvis der er 2 eller flere mineryddere
-// En funktion der bestemmer, hvad blast radius er
+#define OBSTACLE_NONE 0
+#define OBSTACLE_TREE 1
+#define OBSTACLE_HILL 2
+#define OBSTACLE_STONE 3
 
-// En funktion der sørger for, at 2 deminers ALDRIG kan være indenfor en bestemt blast radius
-typedef struct Mines {
-    int x;
-    int y;
-    int mineID; // Dette skal bruges til at fjerne radius efter at minen er clearet
-} Mines; // Et struct med, hvad minerne indeholder. De indeholder en x- og y koordinat samt et mineID
+enum point_value {
+    Clear, Obstacle, Mine, BlastRadius // Har tilføjet blast radius til denne struct
+};
+char point_value_name[4] = {'O', 'X', 'M', 'B'}; // Har tilføjet B til denne char array
 
-typedef struct Blast {
-    int x;
-    int y;
-    int mineID;
-} Blast; // Et struct med, hvad blast radius indeholder. Det indeholder en x- og y koordinat samt et mineID
+typedef struct mapPoint {
+    int point_value_x;
+    int point_value_y;
+    enum point_value point_value;
+} mapPoint;
 
-Blast blast_radius(int active_miners, int *true_false, int mine_count, Mines * mines);
-Blast add_koordinat(int y, int x, int id);
-void radius_of_explosion(int n);
+mapPoint* get_cell(mapPoint* map, int mapSize, int y, int x);
+void create_map(int mapSize, mapPoint* map);
+void print_map(int mapSize, mapPoint* map);
+void check_a_point(int mapSize, mapPoint* map);
+void red();
+void green();
+void reset();
+void yellow();
+void blue();
+void blast_radius(int mapSize, mapPoint* map); // Denne funktion er tilføjet for at få blast raduius
 
 int main(void) {
-    int mine_count = MINE_COUNT; // Midlertidig antal
-    int true_flag = TRUE;
-    int mine_x;
-    int mine_y;
-    Mines mines[mine_count]; // Laver en array mines[mine_count] af structen Mines
-    for(int i = 0; i < mine_count; i++) {  // Tæller op i et loop, hvor mange mine_x og mine_y værdier, der skal være samt hvor mange mineID der skal være
-        mine_x = i;
-        mine_y = i;
-        mines[i].x = mine_x; // Tilkobler arrayet med structen og giver værdien "x" værdien "mine_x"
-        mines[i].y = mine_y; // Samme som ovenover bare med y
-        mines[i].mineID = i; // Samme som ovenover bare med mineID
-    }
-    blast_radius(ACTIVE_MINERS, &true_flag, mine_count, mines); // Kalder blast_radius funktionen
+    srand(time(NULL));
+    mapPoint* map = NULL;
+    int mapSize = (rand() % 20) + 10;
+    map = (mapPoint*)malloc(sizeof(mapPoint) * mapSize * mapSize);
+
+    // Generate the map
+    create_map(mapSize, map);
+    print_map(mapSize, map);
+
+    // Mark the blast radius on the map
+    blast_radius(mapSize, map);
+    printf("\nUpdated Map After Blast Radius:\n"); // Printer et nyt map efter blast radius
+    print_map(mapSize, map);
+
+    // Check specific points
+    check_a_point(mapSize, map);
+
+    free(map);
+    map = NULL;
+
     return 0;
 }
 
+mapPoint* get_cell(mapPoint* map, int mapSize, int y, int x) {
+    return map + mapSize * y + x;
+}
 
-Blast blast_radius(int active_miners, int *true_false, int mine_count, Mines * mines) {
-    Blast *blast = malloc(sizeof(Blast) * mine_count * 9);
-    if (blast == NULL) {
-        printf("Failed to allocate memory");
-        exit(EXIT_FAILURE);
+void create_map(int mapSize, mapPoint* map) {
+    mapPoint* cell;
+    for (int y = 0; y < mapSize; y++) {
+        for (int x = 0; x < mapSize; x++) {
+            cell = get_cell(map, mapSize, y, x);
+            int outcome = rand() % 10; // Randomize terrain
+            if (outcome < 1) {
+                cell->point_value = Mine;
+            } else if (outcome < 4) {
+                cell->point_value = Obstacle;
+            } else {
+                cell->point_value = Clear;
+            }
+            cell->point_value_x = x;
+            cell->point_value_y = y;
+        }
     }
-    if (active_miners > 1) {
-        // Funktion der er aktiv, hvis der er 2 eller flere deminers
-         *true_false = TRUE;
+}
+
+void print_map(int mapSize, mapPoint* map) {
+    for (int y = 0; y < mapSize; y++) {
+        for (int x = 0; x < mapSize; x++) {
+            mapPoint* cell = get_cell(map, mapSize, y, x);
+
+            if (cell->point_value == Mine) {
+                red();
+            } else if (cell->point_value == Obstacle) {
+                yellow();
+            } else if (cell->point_value == BlastRadius) { // Har tilføjet blast radius til print_map
+                blue();
+            } else {
+                green();
+            }
+
+            printf("%3c", point_value_name[cell->point_value]);
+            reset();
+        }
+        printf("\n");
     }
-    if (active_miners < 2) {
-        *true_false = FALSE;
+}
+
+void check_a_point(int mapSize, mapPoint* map) {
+    int current_x, current_y;
+    printf("\nCheck the value at a certain point by entering an X and Y coordinate:\n");
+    scanf("%d %d", &current_x, &current_y);
+
+    if (current_x < 0 || current_x >= mapSize || current_y < 0 || current_y >= mapSize) {
+        printf("Point is outside of the map\n");
+    } else {
+        mapPoint* cell = get_cell(map, mapSize, current_y, current_x);
+        printf("At point X:%d, Y:%d, there is %c\n",
+               cell->point_value_x,
+               cell->point_value_y,
+               point_value_name[cell->point_value]);
     }
-    int blast_index = 0;  // Blast index er hvilket felt den er nået til. Den starter i felt 0
-    while(*true_false == TRUE) { // Imens der er mere end 1 deminer
-        for (int i = 0; i < mine_count; i++) {   // Den tæller, hvor mange miner der er. Den starter ved 0 og tæller op
-            for (int j = 0; j < 9; j++) { // Den tæller, hvor mange felter i arrayet omrking minen, som skal kategoriseres som radius
-                int temporary_y = mines[i].y; // Tilføjer temporary values for ikke at ændre i den originale struct
-                int temporary_x = mines[i].x;
-                blast[i] = add_koordinat(temporary_y, temporary_x, mines[i].mineID);
-                blast[blast_index] = add_koordinat(temporary_y--, temporary_x, mines[i].mineID); // Under minen
-                blast_index++; // Tæller op for hver gang den har været i en bestemt del af arrayet, så den ikke kategoriserer det samme felt 2 gange
-                blast[blast_index] = add_koordinat(temporary_y--, temporary_x++, mines[i].mineID); // Skråt for under minen
-                blast_index++;
-                blast[blast_index] = add_koordinat(temporary_y, temporary_x++, mines[i].mineID); // Til højre for minen
-                blast_index++;
-                blast[blast_index] = add_koordinat(temporary_y++, temporary_x++, mines[i].mineID); // Højre skrå hjørne
-                blast_index++;
-                blast[blast_index] = add_koordinat(temporary_y++, temporary_x, mines[i].mineID); // Over minen
-                blast_index++;
-                blast[blast_index] = add_koordinat(temporary_y++, temporary_x--, mines[i].mineID); // Venstre skrå hjørne
-                blast_index++;
-                blast[blast_index] = add_koordinat(temporary_y, temporary_x--, mines[i].mineID); // Til venstre for minen
-                blast_index++;
-                blast[blast_index] = add_koordinat(temporary_y--, temporary_x--, mines[i].mineID); // Venstre nederste hjørne
+}
+
+void blast_radius(int mapSize, mapPoint* map) {
+    for (int y = 0; y < mapSize; y++) { // For loop som kører rundt til alle x værdier
+        for (int x = 0; x < mapSize; x++) { // For loop som kører rundt til alle y værdier
+            mapPoint* cell = get_cell(map, mapSize, y, x); // Kalder structen mapPoint og giver den navnet cell
+
+            if (cell->point_value == Mine) { // Hvis det er en mine
+                for (int dy = -1; dy <= 1; dy++) { // Kører for loopet til de omkringliggende arrays om minerne for y
+                    for (int dx = -1; dx <= 1; dx++) { // for x
+                        int new_y = y + dy;
+                        int new_x = x + dx;
+
+                        // Sikre at den er inden for mappet
+                        if (new_y >= 0 && new_y < mapSize && new_x >= 0 && new_x < mapSize) {
+                            mapPoint* surrounding_cell = get_cell(map, mapSize, new_y, new_x);
+
+                            // Kun opdaterer celler der er clear
+                            if (surrounding_cell->point_value == Clear) {
+                                surrounding_cell->point_value = BlastRadius;
+                            }
+                        }
+                    }
+                }
             }
         }
     }
-    free(blast);
-    return blast[0];
 }
-Blast add_koordinat(int y, int x, int id) {
-    Blast blast; // Definerer en blast ud fra structen Blast
-    blast.y = y; // Tildeler blast y værdien i structen Blast
-    blast.x = x; // Tildeler blast x værdien i structen Blast
-    blast.mineID = id; // Tildeler blast mineID i structen Blast
-    return blast;
+
+void red() {
+    printf("\033[0;31m");
+}
+
+void green() {
+    printf("\033[0;32m");
+}
+
+void reset() {
+    printf("\033[0m");
+}
+
+void yellow() {
+    printf("\033[0;33m");
+}
+
+void blue() { // Tilføjet blå for at gøre blast radius sejere
+    printf("\033[0;34m");
 }
