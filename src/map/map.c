@@ -10,7 +10,7 @@ mapPoint* get_cell(mapPoint* map, int mapSize, int y, int x) {
     return cell;
 }
 
-void create_map(int mapSize, mapPoint* map) {
+void create_map(int mapSize, mapPoint* map, int* amount_of_mines) {
     mapPoint* cell;
 
     for (int y = 0; y < mapSize; y++) {
@@ -19,7 +19,7 @@ void create_map(int mapSize, mapPoint* map) {
             cell = get_cell(map, mapSize, y, x);
             if(outcome == 1) {
                 cell->point_value = MINE_ENUM;
-
+                *amount_of_mines++;
             } else if (outcome > 1 && outcome < 5) {
                 cell->point_value = OBSTACLE_ENUM;
             } else {
@@ -31,38 +31,23 @@ void create_map(int mapSize, mapPoint* map) {
     }
 }
 
-void print_map(int mapSize, mapPoint* map) {
-    int mineCounter = 0;
+void print_map(int mapSize, mapPoint* map, Deminer* deminers, int amount_of_deminers) {
+    mapPoint* cell;
     for (int y = 0; y < mapSize; y++) {
         for (int x = 0; x < mapSize; x++) {
-            if (get_cell(map, mapSize, y, x)->point_value == MINE_ENUM) {
-                red();
-                printf("%3c", point_value_name[MINE_ENUM]);
-                reset();
-                mineCounter++;
-            } else if (get_cell(map, mapSize, y, x)->point_value == OBSTACLE_ENUM) {
-                yellow();
-                printf("%3c", point_value_name[OBSTACLE_ENUM]);
-                reset();
-            } else {
-                green();
-                printf("%3c", point_value_name[CLEAR_ENUM]);
-                reset();
+            cell = get_cell(map, mapSize, y, x);
+            int hit_a_value = 0;
+            for (int i = 0; i < amount_of_deminers; i++) {
+                if (cell->point_value_x == deminers[i].x && cell->point_value_y == deminers[i].y) {
+                    printf("%s%3d",point_value_color[DEMINER_ENUM], i+1);
+                    hit_a_value = 1;
+                }
+            }
+            if (hit_a_value == 0) {
+                printf("%s%3c",point_value_color[cell->point_value], point_value_name[cell->point_value]);
             }
         }
-        printf("\n");
-    }
-    printf("\n\n\n");
-    printf("There is a total of %d mines there needs to be cleared\n\n", mineCounter);
-    printf("They are located at the following points\n");
-    int counter = 0;
-    for(int y = 0; y < mapSize; y++) {
-        for (int x = 0; x < mapSize; x++) {
-            if (get_cell(map, mapSize, y, x)->point_value == MINE_ENUM) {
-                counter = counter + 1;
-                printf("Mine %-2d is located at point X = %-2d, Y = %d\n", counter, x, y);
-            }
-        }
+        printf("\n%s", point_value_color[4]);
     }
 }
 

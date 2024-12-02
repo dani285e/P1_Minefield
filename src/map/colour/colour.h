@@ -12,6 +12,9 @@ void green();
 void blue();
 void reset();
 
+extern char point_value_color[9][10];
+
+
 
 
 #endif //COLOUR_H

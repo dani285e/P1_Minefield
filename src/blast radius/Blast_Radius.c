@@ -16,7 +16,7 @@
 #define OBSTACLE_STONE 3
 
 enum point_value {
-    Clear, Obstacle, Mine, BlastRadius // Har tilføjet blast radius til denne struct
+    CLEAR_ENUM, OBSTACLE_ENUM, MINE_ENUM, BlastRadius // Har tilføjet blast radius til denne struct
 };
 char point_value_name[4] = {'O', 'X', 'M', 'B'}; // Har tilføjet B til denne char array
 
@@ -72,11 +72,11 @@ void create_map(int mapSize, mapPoint* map) {
             cell = get_cell(map, mapSize, y, x);
             int outcome = rand() % 10; // Randomize terrain
             if (outcome < 1) {
-                cell->point_value = Mine;
+                cell->point_value = MINE_ENUM;
             } else if (outcome < 4) {
-                cell->point_value = Obstacle;
+                cell->point_value = OBSTACLE_ENUM;
             } else {
-                cell->point_value = Clear;
+                cell->point_value = CLEAR_ENUM;
             }
             cell->point_value_x = x;
             cell->point_value_y = y;
@@ -89,9 +89,9 @@ void print_map(int mapSize, mapPoint* map) {
         for (int x = 0; x < mapSize; x++) {
             mapPoint* cell = get_cell(map, mapSize, y, x);
 
-            if (cell->point_value == Mine) {
+            if (cell->point_value == MINE_ENUM) {
                 red();
-            } else if (cell->point_value == Obstacle) {
+            } else if (cell->point_value == OBSTACLE_ENUM) {
                 yellow();
             } else if (cell->point_value == BlastRadius) { // Har tilføjet blast radius til print_map
                 blue();
@@ -127,7 +127,7 @@ void blast_radius(int mapSize, mapPoint* map) {
         for (int x = 0; x < mapSize; x++) { // For loop som kører rundt til alle y værdier
             mapPoint* cell = get_cell(map, mapSize, y, x); // Kalder structen mapPoint og giver den navnet cell
 
-            if (cell->point_value == Mine) { // Hvis det er en mine
+            if (cell->point_value == MINE_ENUM) { // Hvis det er en mine
                 for (int dy = -1; dy <= 1; dy++) { // Kører for loopet til de omkringliggende arrays om minerne for y
                     for (int dx = -1; dx <= 1; dx++) { // for x
                         int new_y = y + dy;
@@ -138,7 +138,7 @@ void blast_radius(int mapSize, mapPoint* map) {
                             mapPoint* surrounding_cell = get_cell(map, mapSize, new_y, new_x);
 
                             // Kun opdaterer celler der er clear
-                            if (surrounding_cell->point_value == Clear) {
+                            if (surrounding_cell->point_value == CLEAR_ENUM) {
                                 surrounding_cell->point_value = BlastRadius;
                             }
                         }

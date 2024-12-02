@@ -20,3 +20,15 @@ void blue() {
 void reset() {
     printf("\033[0m");
 }
+
+char point_value_color[9][10] = {
+    "\033[0;32m",   //CLEAR_ENUM
+    "\033[0;33m",   //OBSTACLE_ENUM
+    "\033[0;31m",   //MINE_ENUM
+    "\033[0m",      //PATH_ENUM
+    "\033[0m",      //HILL_ENUM
+    "\033[0;34m",   //EXPLOSIVE_ENUM
+    "\033[0m",      //DEMINER_ENUM
+    "\033[0m",      //LOWER_ELEVATION_ENUM
+    "\033[0m",      //LESSER_ELEVATION_ENUM
+};
