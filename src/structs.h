@@ -6,10 +6,10 @@
 #define STRUCTS_H
 
 
-typedef struct deminer{
-    int id;
+typedef struct {
     int x;
     int y;
+    int distance;
 } Deminer;
 
 typedef struct Map {
@@ -21,14 +21,19 @@ typedef struct Map {
 enum point_value {
     CLEAR_ENUM,          // Represents an empty or clear space
     OBSTACLE_ENUM,       // Represents an obstacle (e.g., a tree or blockage)
+    OBSTACLE_WALKABLE_ENUM,
     MINE_ENUM,           // Represents a mine
+    EXPLOSIVE_ENUM,
+    DEMINER_ENUM,
+
+
     PATH_ENUM,           // Represents a path
-    HILL_ENUM,           // Represents a hill (highest elevation)
     LOWER_ELEVATION_ENUM,// Represents a cell with lower elevation (adjacent to a hill)
-    LESSER_ELEVATION_ENUM// Represents a cell with the lowest elevation
+    LESSER_ELEVATION_ENUM,// Represents a cell with the lowest elevation
+    HILL_ENUM,           // Represents a hill (highest elevation)
 };
 
-static char point_value_name[7] = {'C', 'O', 'M', 'P', 'H', 'L', 'l'}; // Corresponding characters
+static char point_value_name[10] = {'0', 'O', 'X', 'M', 'E', 'D', 'P', 'L', 'l', 'H'}; // Corresponding characters
 
 
 typedef struct {
@@ -36,5 +41,11 @@ typedef struct {
     int point_value_y;
     enum point_value point_value;
 } mapPoint;
+
+typedef struct {
+    int start_point_x;
+    int start_point_y;
+} startpoint;
+
 
 #endif //STRUCTS_H

@@ -25,8 +25,8 @@ int deminer() { //this is a replacement for the fake int main(void) function tha
 
 
 
-    create_map(mapSize, map);
-    print_map(mapSize, map);
+    //create_map(mapSize, map);
+    //print_map(mapSize, map);
 
     int deminers = get_deminers(map, mapSize);
     printf("Deminers needed: %d\n", deminers);
@@ -42,10 +42,10 @@ int deminer() { //this is a replacement for the fake int main(void) function tha
     // }
 
     create_temproute(mapSize, &temp_route);
-    print_map(mapSize, temp_route);
+    //print_map(mapSize, temp_route);
 
     create_elevation_map(mapSize, &elevation);
-    print_map(mapSize, elevation);
+    //print_map(mapSize, elevation);
 
     printf("it takes %lf minutes to walk the route", total_time(map, mapSize, temp_route, elevation));
 
