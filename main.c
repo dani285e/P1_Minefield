@@ -71,6 +71,7 @@ void move_deminer(mapPoint* map, int mapSize, int x, int y) {
 
 void print_map_info(int mapSize, mapPoint* map) {
     int mineCounter = unit_counter(0, mapSize-1, 0, mapSize-1, map, mapSize, MINE_ENUM);
+    printf("\033[0m");
     printf("\n\n\n");
     printf("There is a total of %d mines there needs to be cleared\n\n", mineCounter);
     printf("They are located at the following points\n");
@@ -103,6 +104,7 @@ int unit_counter(int y_1, int y_2, int x_1, int x_2, mapPoint* map, int mapSize,
 }
 
 void function_find_start_line (int mapSize, mapPoint* map, Deminer* deminers, int amount_of_deminers) {
+    printf("\033[0m");
     double size = mapSize;
     int top_counter = unit_counter(0, ceil(size/2)-1, 0, mapSize-1, map, mapSize, MINE_ENUM);
     int left_counter = unit_counter(0, mapSize-1, 0, ceil(size/2)-1, map, mapSize, MINE_ENUM);
