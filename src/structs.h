@@ -4,6 +4,17 @@
 
 #ifndef STRUCTS_H
 #define STRUCTS_H
+typedef struct QueueNode {
+    int x;
+    int y;
+    int distance;
+    struct QueueNode* next;
+} QueueNode;
+
+typedef struct Queue {
+    QueueNode* front;
+    QueueNode* rear;
+} Queue;
 
 
 typedef struct {

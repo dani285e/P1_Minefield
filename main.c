@@ -6,11 +6,62 @@
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
-
+#include <windows.h>
 #define MINES 20
 
 
+///KØFUNKTIONER TIL BFS
+Queue* create_queue() {
+    Queue* queue = (Queue*)malloc(sizeof(Queue));
+    queue->front = NULL;
+    queue->rear = NULL;
+    return queue;
+}
+void enqueue(Queue* queue, int x, int y, int distance) {
+    QueueNode* new_node = (QueueNode*)malloc(sizeof(QueueNode));
+    new_node->x = x;
+    new_node->y = y;
+    new_node->distance = distance;
+    new_node->next = NULL;
 
+    if (queue->rear == NULL) {
+        queue->front = new_node;
+        queue->rear = new_node;
+    } else {
+        queue->rear->next = new_node;
+        queue->rear = new_node;
+    }
+}
+int dequeue(Queue* queue, int* x, int* y, int* distance) {
+    if (queue->front == NULL) {
+        return 0; // Køen er tom
+    }
+
+    QueueNode* temp = queue->front;
+    *x = temp->x;
+    *y = temp->y;
+    *distance = temp->distance;
+
+    queue->front = queue->front->next;
+    if (queue->front == NULL) {
+        queue->rear = NULL;
+    }
+
+    free(temp);
+    return 1; // Succesfuld fjernelse
+}
+int is_empty(Queue* queue) {
+    return (queue->front == NULL);
+}
+void free_queue(Queue* queue) {
+    QueueNode* current = queue->front;
+    while (current != NULL) {
+        QueueNode* next = current->next;
+        free(current);
+        current = next;
+    }
+    free(queue);
+}
 
 mapPoint* get_cell(mapPoint* map, int mapSize, int y, int x);
 void check_a_point(int mapSize, mapPoint* map);
@@ -20,6 +71,7 @@ int find_shortest_path_distance_sorter(const void *ep1, const void *ep2);
 void function_find_start_line (int mapSize, mapPoint* map, Deminer* deminers, int amount_of_deminers);
 void move_deminer(mapPoint* map, int mapSize, int x, int y);
 void print_map_info(int mapSize, mapPoint* map);
+int find_closest_deminer(Deminer* deminers, int mapsize, mapPoint* map, int amount_of_deminers, int target_x, int target_y);
 void find_shortest_path (int mapSize, mapPoint* map, int amount_of_deminers, Deminer* deminers);
 
 int main(void) {
@@ -29,7 +81,7 @@ int main(void) {
 
     mapPoint* map = NULL;
     //int mapSize = (rand()% 20) + 10;
-    int mapSize = 13;
+    int mapSize = 20;
     int amount_of_mines = 0;
     int amount_of_deminers = 3; // SKAL VÆRE GIVET FRA EN ANDEN FUNKTION
     map = (mapPoint*)malloc(sizeof(mapPoint)*mapSize*mapSize);
@@ -172,6 +224,108 @@ int compare_lines(int counter1, int counter2, int counter3, int counter4) {
     }
 }
 
+
+int bfs_find_distance(int mapsize, mapPoint* map, int start_x, int start_y, int target_x, int target_y, int* path, int* path_length) {
+    int** visited = malloc(mapsize * sizeof(int*)); //Array, der holder styr på hvilke celler er besøgt.
+    int** prev = malloc(mapsize * sizeof(int*)); //Array, der holder styr på den endelige rute.
+    if (visited == NULL || prev == NULL) {
+        printf("Allocation of visited/prev failed, exiting...\n");
+        exit(EXIT_FAILURE);
+    }
+    for (int i = 0; i < mapsize; i++) {
+        visited[i] = malloc(mapsize* sizeof(int));
+        prev[i] = malloc(mapsize * sizeof(int));
+        if (visited[i] == NULL || prev[i] == NULL) {
+            printf("Allocation of visited/prev failed, exiting...\n");
+            exit(EXIT_FAILURE);
+        }
+        for (int j = 0; j < mapsize; j++) {
+            visited[i][j] = 0;
+        }
+    }
+
+    // Retningsvektorer til at navigere op, ned, venstre, højre
+    int directions[4][2] = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+
+    // Kø for BFS: hver entry er {x, y, distance}
+    Queue* queue = create_queue();
+    enqueue(queue, start_x, start_y, 0);
+    visited[start_y][start_x] = 1;
+
+    while (!is_empty(queue)) {
+        int x, y, dist;
+        dequeue(queue, &x, &y, &dist);
+
+        // Hvis vi har nået målet
+        if (x == target_x && y == target_y) {
+            *path_length = dist;
+
+            //Tilbagetracker for at finde ruten:
+            int current_x = target_x, current_y = target_y; // Start fra målets koordinater
+
+            for (int step = dist - 1; step >= 0; step--) {
+                // Gem den aktuelle celle i ruten
+                path[step * 2] = current_x;
+                path[step * 2 + 1] = current_y;
+
+                // Find forgængeren fra `prev`
+                int previous_cell = prev[current_y][current_x];
+
+                // Beregn forgængerens koordinater
+                current_x = previous_cell % mapsize;   // Kolonnen (x-koordinat)
+                current_y = previous_cell / mapsize;   // Rækken (y-koordinat)
+            }
+
+            printf("Path to the target:\n");
+            for (int step = 0; step < *path_length; step++) {
+                printf("Step %d: (%d, %d)\n", step, path[step * 2], path[step * 2 + 1]);
+            }
+
+            free_queue(queue);
+            return dist;
+        }
+
+        // Gennemgå alle naboer
+        for (int i = 0; i < 4; i++) {
+            int new_x = x + directions[i][0];
+            int new_y = y + directions[i][1];
+
+            // Tjek om naboen er indenfor gridet og ikke besøgt
+            if (new_x >= 0 && new_x < mapsize && new_y >= 0 && new_y < mapsize &&
+                !visited[new_y][new_x]) {
+                mapPoint* neighbor = get_cell(map, mapsize, new_y, new_x);
+
+                // Tjek om naboen er tilladt
+                if (neighbor->point_value != OBSTACLE_ENUM) {
+                    visited[new_y][new_x] = 1;
+                    prev[new_y][new_x] = y * mapsize + x; //Gemmer forgængeren, så ruten kan konstrueres.
+                    enqueue(queue, new_x, new_y, dist + 1);
+                }
+                }
+        }
+    }
+
+    free_queue(queue);
+    return -1; // Returner -1, hvis målet ikke kan nås
+}
+
+int find_closest_deminer(Deminer* deminers, int mapsize, mapPoint* map, int amount_of_deminers, int target_x, int target_y) {
+    int distance = INT_MAX;
+    int deminer = -1;
+    int path[mapsize * mapsize * 2];
+    int path_length;
+
+    for (int i = 0; i < amount_of_deminers; i++) {
+        int dist_deminer = bfs_find_distance(mapsize, map, deminers[i].x, deminers[i].y, target_x, target_y, path, &path_length);
+        if (dist_deminer < distance) {
+            distance = dist_deminer;
+            deminer = i;
+        }
+    }
+
+    return deminer;
+}
+
 // Funktion der skal kunne genererer en rute med hjælp fra Nearest Neighbor Algoritmen
 // Først skal den vidde sit startspunkt
 // Så skal den kunne vidde afstanden til alle andre miner
@@ -187,6 +341,13 @@ void find_shortest_path (int mapSize, mapPoint* map, int amount_of_deminers, Dem
     mapPoint* cell;
     //deminer* current_deminer = deminers[0];
 
+    int* path = malloc(mapSize * mapSize * 2 * sizeof(int)); //Allokerer array, der holder stien
+    if (path == NULL) {
+        printf("Allocation of path failed, exiting...\n");
+        exit(EXIT_FAILURE);
+    }
+    int path_length;
+
     while (amount_of_mines != 1) {
         amount_of_mines = 0;
         shortest_distance_x = 0;
@@ -195,30 +356,38 @@ void find_shortest_path (int mapSize, mapPoint* map, int amount_of_deminers, Dem
         for (int y = 0; y < mapSize; y++) {
             for (int x = 0; x < mapSize; x++) {
                 cell = get_cell(map, mapSize, y, x);
+
                 if (cell->point_value == MINE_ENUM) {
                     amount_of_mines++;
-                    distance = fabs(deminers[whose_turn].x - cell->point_value_x) + fabs(deminers[whose_turn].y - cell->point_value_y);
-                    printf("The distance is %d to mine X:%d, Y:%d\n", distance, x, y);
+                    distance = bfs_find_distance(mapSize, map, deminers[whose_turn].x, deminers[whose_turn].y, x, y, path, &path_length);
+
                     if (distance < shortest_distance) {
                         shortest_distance = distance;
                         shortest_distance_x = x;
                         shortest_distance_y = y;
                     }
+                    printf("The distance is %d to mine X:%d, Y:%d\n", distance, x, y);
                 }
             }
         }
-        printf("The shortest distance is %d to mine X:%d, Y:%d\n", shortest_distance, shortest_distance_x, shortest_distance_y);
+
+        printf("The shortest distance is %d to mine X:%d, Y:%d, deminer %d moves.\n", shortest_distance, shortest_distance_x, shortest_distance_y, whose_turn + 1);
+
+        for (int step = 0; step < path_length; step++) {
+            int x = path[step * 2];
+            int y = path[step * 2 + 1];
+            get_cell(map, mapSize, y, x)->point_value = PATH_ENUM;
+            printf("Step %d: (%d, %d)\n", step, x , y);
+            print_map(mapSize, map, deminers, amount_of_deminers);
+            Sleep(1000);
+        }
+
+        whose_turn = find_closest_deminer(deminers, mapSize, map, amount_of_deminers, shortest_distance_x, shortest_distance_y);
+
         deminers[whose_turn].distance += shortest_distance;
         //printf("So far deminer 0 has walked %d\n", deminers[0].distance);
         deminers[whose_turn].x = shortest_distance_x;
         deminers[whose_turn].y = shortest_distance_y;
-
-        if (whose_turn < amount_of_deminers - 1) {
-            whose_turn++;
-        } else {
-            whose_turn = 0;
-        }
-
         print_map(mapSize, map, deminers, amount_of_deminers);
         get_cell(map, mapSize, shortest_distance_y, shortest_distance_x)->point_value = EXPLOSIVE_ENUM;
         char choice;
@@ -229,8 +398,9 @@ void find_shortest_path (int mapSize, mapPoint* map, int amount_of_deminers, Dem
         deminers[i].y = -1;
     }
     print_map(mapSize, map, deminers, amount_of_deminers);
-
+    free(path);
 }
+
 
 int find_shortest_path_distance_sorter(const void *ep1, const void *ep2) {
     return (int*) ep1 - (int*) ep2;
