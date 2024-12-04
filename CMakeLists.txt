@@ -18,3 +18,4 @@ add_executable(P1_Minefield main.c
         src/structs.h
 )
 target_link_libraries(P1_Minefield mining_functions)
+add_executable(aPath aPath.c)

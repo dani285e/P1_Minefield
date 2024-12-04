@@ -10,6 +10,7 @@ typedef struct {
     int x;
     int y;
     int distance;
+    int status;
 } Deminer;
 
 typedef struct Map {
