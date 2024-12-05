@@ -65,6 +65,7 @@ void find_shortest_path (int mapSize, mapPoint* map, int amount_of_deminers, Dem
     int shortest_distance = INT_MAX;
     int shortest_distance_x = 0;
     int shortest_distance_y = 0;
+    int shortest_distance_weight = 0;
     int whose_turn = 0;
     mapPoint* cell;
     //deminer* current_deminer = deminers[0];
@@ -82,21 +83,24 @@ void find_shortest_path (int mapSize, mapPoint* map, int amount_of_deminers, Dem
         }
     }
 
-    int path_length;
+    int path_length = 0;
+    int weight = 0;
 
     while (amount_of_mines != 1) {
         printf("\033[0m");
 
         //Finder den tætteste mine for deminerens tur, opdaterer shortest_distance x, y og amount_of_mines:
-        find_closest_mine(&shortest_distance_x, &shortest_distance_y, &shortest_distance, mapSize, map, whose_turn,
-                            deminers, &amount_of_mines, path, &path_length);
+        find_closest_mine(&shortest_distance_x, &shortest_distance_y, &shortest_distance, &shortest_distance_weight ,mapSize, map, whose_turn,
+                            deminers, &amount_of_mines, path, &path_length, &weight);
 
-        printf("The shortest distance is %d to mine X:%d, Y:%d, deminer %d moves.\n", shortest_distance, shortest_distance_x, shortest_distance_y, whose_turn + 1);
+
 
         //Efter den tætteste mine er fundet af køres bfs med mål kun mod den tætteset mine,
         //for at opdatere path til den korrekte, så ruten kan genskabes:
         reset_path(path, mapSize); //Resetter path array til -1
-        bfs_find_distance(mapSize, map, deminers[whose_turn].x, deminers[whose_turn].y, shortest_distance_x, shortest_distance_y, path, &path_length);
+        bfs_find_distance(mapSize, map, deminers[whose_turn].x, deminers[whose_turn].y, shortest_distance_x, shortest_distance_y, path, &path_length, &weight);
+        printf("The shortest distance is %d to mine X:%d, Y:%d, deminer %d moves.\n", path_length, shortest_distance_x, shortest_distance_y, whose_turn + 1);
+        printf("The weight is: %d\n", weight);
         print_path(shortest_distance, path, mapSize, map); //Printer pathen:
 
         //Opdaterer deminerens placering, og hvis tur det er, så samme deminer ikke også går næste gang:
@@ -133,11 +137,13 @@ void find_shortest_path (int mapSize, mapPoint* map, int amount_of_deminers, Dem
     printf("Total distance walked all deminers is %d\n", total_distance);
 }
 
-void find_closest_mine(int* shortest_distance_x, int* shortest_distance_y, int* shortest_distance, int mapSize, mapPoint* map,
-                        int whose_turn, Deminer* deminers, int* amount_of_mines, int** path, int* path_length) {
+void find_closest_mine(int* shortest_distance_x, int* shortest_distance_y, int* shortest_distance, int* shortest_distance_weight, int mapSize, mapPoint* map,
+                        int whose_turn, Deminer* deminers, int* amount_of_mines, int** path, int* path_length, int* weight) {
+    *weight = 0;
     *amount_of_mines = 0;
     *shortest_distance_x = 0;
     *shortest_distance_y = 0;
+    *shortest_distance_weight = 0;
     *shortest_distance = INT_MAX;
 
     for (int y = 0; y < mapSize; y++) {
@@ -147,23 +153,29 @@ void find_closest_mine(int* shortest_distance_x, int* shortest_distance_y, int* 
             if (cell->point_value == MINE_ENUM) {
                 *amount_of_mines += 1;
 
-                int distance = bfs_find_distance(mapSize, map, deminers[whose_turn].x, deminers[whose_turn].y, x, y, path, path_length);
+                int distance = bfs_find_distance(mapSize, map, deminers[whose_turn].x, deminers[whose_turn].y, x, y, path, path_length, weight);
                 if (distance == -1) {
                     printf("One or more mines couldn't be reached\n");
                     continue;
                 }
+                //TODO Weight need to be implementet correctly
                 if (distance < *shortest_distance) {
                     *shortest_distance = distance;
                     *shortest_distance_x = x;
                     *shortest_distance_y = y;
+                    *shortest_distance_weight = *weight;
                 }
-                printf("The distance is %d to mine X:%d, Y:%d\n", distance, x, y);
+                //printf("The distance is %d to mine X:%d, Y:%d\n", distance, x, y);
             }
         }
     }
+    printf("The distance is %d to mine X:%d, Y:%d\n", *shortest_distance, *shortest_distance_x, *shortest_distance_y);
+    printf("The weight is: %d\n", *weight);
 }
 
-int bfs_find_distance(int mapsize, mapPoint* map, int start_x, int start_y, int target_x, int target_y, int** path, int* path_length) {
+int bfs_find_distance(int mapsize, mapPoint* map, int start_x, int start_y, int target_x, int target_y, int** path, int* path_length, int* weight) {
+    *weight = 0;
+    int local_weight = 0;
     int** visited = malloc(mapsize * sizeof(int*)); //Array, der holder styr på hvilke celler er besøgt.
     mapPoint** prev = malloc(mapsize * sizeof(mapPoint*)); //Array, der holder styr på den endelige rute.
     if (visited == NULL || prev == NULL) {
@@ -207,16 +219,26 @@ int bfs_find_distance(int mapsize, mapPoint* map, int start_x, int start_y, int 
                 mapPoint previous_cell = prev[current_y][current_x];
 
 
-                if (current_x != -1) {
+                if (current_x != -1 || current_y != -1) {
                     path[step][0] = current_x;
                     path[step][1] = current_y;
 
                     //printf("Path for Deminer %d:\n", );
 
+                    int current_point_value = get_cell(map, mapsize, current_y, current_x)->point_value;
+                    if (current_point_value == OBSTACLE_WALKABLE_ENUM) {
+                        local_weight += 2;
+                    } else if (current_point_value == CLEAR_ENUM)
+                    {
+                        local_weight += 1;
+                    }
+
                     current_x = previous_cell.point_value_x;   // Kolonnen (x-koordinat)
                     current_y = previous_cell.point_value_y;   // Rækken (y-koordinat)
                 }
+
             }
+            *weight = local_weight;
 
             for (int i = 0; i < mapsize; i++) {
                 free(prev[i]);
