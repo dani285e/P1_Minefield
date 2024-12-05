@@ -1,5 +1,3 @@
-
-
 #include "src//deminers/deminers.h"
 #include "src/map/map.h"
 #include <stdio.h>
@@ -305,7 +303,7 @@ int bfs_find_distance(int mapsize, mapPoint* map, int start_x, int start_y, int 
 
                     enqueue(queue, new_x, new_y, dist + 1);
                 }
-                }
+            }
         }
     }
 
@@ -360,6 +358,36 @@ void update_deminer(Deminer* deminers, int* whose_turn, int shortest_distance, i
     }
 }
 
+void find_closest_mine(int* shortest_distance_x, int* shortest_distance_y, int* shortest_distance, int mapSize, mapPoint* map,
+                        int whose_turn, Deminer* deminers, int* amount_of_mines, int** path, int* path_length) {
+    *amount_of_mines = 0;
+    *shortest_distance_x = 0;
+    *shortest_distance_y = 0;
+    *shortest_distance = INT_MAX;
+
+    for (int y = 0; y < mapSize; y++) {
+        for (int x = 0; x < mapSize; x++) {
+            mapPoint* cell = get_cell(map, mapSize, y, x);
+
+            if (cell->point_value == MINE_ENUM) {
+                *amount_of_mines += 1;
+
+                int distance = bfs_find_distance(mapSize, map, deminers[whose_turn].x, deminers[whose_turn].y, x, y, path, path_length);
+                if (distance == -1) {
+                    printf("One or more mines couldn't be reached\n");
+                    continue;
+                }
+                if (distance < *shortest_distance) {
+                    *shortest_distance = distance;
+                    *shortest_distance_x = x;
+                    *shortest_distance_y = y;
+                }
+                printf("The distance is %d to mine X:%d, Y:%d\n", distance, x, y);
+            }
+        }
+    }
+}
+
 // Funktion der skal kunne genererer en rute med hjælp fra Nearest Neighbor Algoritmen
 // Først skal den vidde sit startspunkt
 // Så skal den kunne vidde afstanden til alle andre miner
@@ -367,8 +395,7 @@ void update_deminer(Deminer* deminers, int* whose_turn, int shortest_distance, i
 // Så skal den gøre det hele igen indtil der ikke er flere miner
 void find_shortest_path (int mapSize, mapPoint* map, int amount_of_deminers, Deminer* deminers) {
     int amount_of_mines = -1;
-    int distance;
-    int shortest_distance = 100;
+    int shortest_distance = INT_MAX;
     int shortest_distance_x = 0;
     int shortest_distance_y = 0;
     int whose_turn = 0;
@@ -392,31 +419,10 @@ void find_shortest_path (int mapSize, mapPoint* map, int amount_of_deminers, Dem
 
     while (amount_of_mines != 1) {
         printf("\033[0m");
-        amount_of_mines = 0;
-        shortest_distance_x = 0;
-        shortest_distance_y = 0;
-        shortest_distance = INT_MAX;
-        for (int y = 0; y < mapSize; y++) {
-            for (int x = 0; x < mapSize; x++) {
-                cell = get_cell(map, mapSize, y, x);
 
-                if (cell->point_value == MINE_ENUM) {
-                    amount_of_mines++;
-
-                    distance = bfs_find_distance(mapSize, map, deminers[whose_turn].x, deminers[whose_turn].y, x, y, path, &path_length);
-                    if (distance == -1) {
-                        printf("One or more mines couldn't be reached\n");
-                        continue;
-                    }
-                    if (distance < shortest_distance) {
-                        shortest_distance = distance;
-                        shortest_distance_x = x;
-                        shortest_distance_y = y;
-                    }
-                    printf("The distance is %d to mine X:%d, Y:%d\n", distance, x, y);
-                }
-            }
-        }
+        //Finder den tætteste mine for deminerens tur, opdaterer shortest_distance x, y og amount_of_mines:
+        find_closest_mine(&shortest_distance_x, &shortest_distance_y, &shortest_distance, mapSize, map, whose_turn,
+                            deminers, &amount_of_mines, path, &path_length);
 
         printf("The shortest distance is %d to mine X:%d, Y:%d, deminer %d moves.\n", shortest_distance, shortest_distance_x, shortest_distance_y, whose_turn + 1);
 
@@ -425,7 +431,8 @@ void find_shortest_path (int mapSize, mapPoint* map, int amount_of_deminers, Dem
         reset_path(path, mapSize); //Resetter path array til -1
         bfs_find_distance(mapSize, map, deminers[whose_turn].x, deminers[whose_turn].y, shortest_distance_x, shortest_distance_y, path, &path_length);
         print_path(shortest_distance, path, mapSize, map); //Printer pathen:
-        //Opdaterer deminerens placering, og hvis tur det er:
+
+        //Opdaterer deminerens placering, og hvis tur det er, så samme deminer ikke også går næste gang:
         update_deminer(deminers, &whose_turn, shortest_distance, shortest_distance_x, shortest_distance_y, amount_of_deminers);
 
         //Printer mappet:
@@ -439,7 +446,7 @@ void find_shortest_path (int mapSize, mapPoint* map, int amount_of_deminers, Dem
         scanf(" %c", &choice);
     }
 
-    //Er alle miner nået flyttes deminersne ud af griddet:
+    //Er alle miner nået flyttes deminerne ud af griddet:
     for (int i = 0; i < amount_of_deminers; i++) {
         deminers[i].x = -1;
         deminers[i].y = -1;
