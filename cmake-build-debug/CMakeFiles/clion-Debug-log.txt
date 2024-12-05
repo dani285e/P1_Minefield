@@ -1,10 +1,10 @@
-"C:\Program Files\JetBrains\CLion 2024.2.1\bin\cmake\win\x64\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug -G "MinGW Makefiles" -S "C:\Users\Oliver Brinch\Desktop\P1_Minefield" -B "C:\Users\Oliver Brinch\Desktop\P1_Minefield\cmake-build-debug"
+"D:\JetBrains\CLion 2024.2.2\bin\cmake\win\x64\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug -G "MinGW Makefiles" -S D:\AAU\IMPR\P1_Minefield -B D:\AAU\IMPR\P1_Minefield\cmake-build-debug
 -- The C compiler identification is GNU 13.1.0
 -- Detecting C compiler ABI info
 -- Detecting C compiler ABI info - done
--- Check for working C compiler: C:/Program Files/JetBrains/CLion 2024.2.1/bin/mingw/bin/gcc.exe - skipped
+-- Check for working C compiler: D:/JetBrains/CLion 2024.2.2/bin/mingw/bin/gcc.exe - skipped
 -- Detecting C compile features
 -- Detecting C compile features - done
--- Configuring done (1.8s)
+-- Configuring done (0.8s)
 -- Generating done (0.0s)
--- Build files have been written to: C:/Users/Oliver Brinch/Desktop/P1_Minefield/cmake-build-debug
+-- Build files have been written to: D:/AAU/IMPR/P1_Minefield/cmake-build-debug
