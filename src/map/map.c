@@ -1,8 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include "map.h"
-
-
 #define MINES 20
 
 mapPoint* get_cell(mapPoint* map, int mapSize, int y, int x) {
@@ -68,5 +64,23 @@ void check_a_point(int mapSize, mapPoint* map) {
         get_cell(map, mapSize, current_y, current_x)->point_value_x,
         get_cell(map, mapSize, current_y, current_x)->point_value_y,
         point_value_name[get_cell(map, mapSize, current_y, current_x)->point_value]);
+    }
+}
+
+
+void print_map_info(int mapSize, mapPoint* map) {
+    int mineCounter = unit_counter(0, mapSize-1, 0, mapSize-1, map, mapSize, MINE_ENUM);
+    printf("\033[0m");
+    printf("\n\n\n");
+    printf("There is a total of %d mines there needs to be cleared\n\n", mineCounter);
+    printf("They are located at the following points\n");
+    int counter = 0;
+    for(int y = 0; y < mapSize; y++) {
+        for (int x = 0; x < mapSize; x++) {
+            if (get_cell(map, mapSize, y, x)->point_value == MINE_ENUM) {
+                counter = counter + 1;
+                printf("Mine %-2d is located at point X = %-2d, Y = %d\n", counter, x, y);
+            }
+        }
     }
 }
