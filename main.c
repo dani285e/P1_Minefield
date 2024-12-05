@@ -106,7 +106,6 @@ int main(void) {
     }
     printf("Total distance walked all deminers is %d\n", total_distance);
 
-
     free(map);
     free(deminers);
 
@@ -328,6 +327,39 @@ void reset_path(int** path, int mapsize) {
     }
 }
 
+void print_path(int shortest_distance, int** path, int mapSize, mapPoint* map) {
+    //Laver loop, der tilskriver ruten i mappet:
+    for (int step = 0; step < shortest_distance; step++) {
+        int x = path[step][0];
+        int y = path[step][1];
+
+        if (x < 0 || x >= mapSize || y < 0 || y >= mapSize) {
+            printf("Error: Path coordinates out of bounds at step %d: (%d, %d)\n", step, x, y);
+            exit(EXIT_FAILURE);
+        }
+
+        //Det ønskes ikke at overskrive miner, andre deminere og steder, der allerede er placeret explosives:
+        if (map[y * mapSize + x].point_value != MINE_ENUM &&
+            map[y * mapSize + x].point_value != DEMINER_ENUM &&
+            map[y * mapSize + x].point_value != EXPLOSIVE_ENUM) {
+            map[y * mapSize + x].point_value = PATH_ENUM;
+            }
+    }
+}
+
+void update_deminer(Deminer* deminers, int* whose_turn, int shortest_distance, int shortest_distance_x, int shortest_distance_y, int amount_of_deminers) {
+    deminers[*whose_turn].distance += shortest_distance;
+    //printf("So far deminer 0 has walked %d\n", deminers[0].distance);
+    deminers[*whose_turn].x = shortest_distance_x; //Flytter demineren
+    deminers[*whose_turn].y = shortest_distance_y;
+
+    if (*whose_turn < amount_of_deminers - 1) {
+        *whose_turn += 1;
+    } else {
+        *whose_turn = 0;
+    }
+}
+
 // Funktion der skal kunne genererer en rute med hjælp fra Nearest Neighbor Algoritmen
 // Først skal den vidde sit startspunkt
 // Så skal den kunne vidde afstanden til alle andre miner
@@ -390,47 +422,30 @@ void find_shortest_path (int mapSize, mapPoint* map, int amount_of_deminers, Dem
 
         //Efter den tætteste mine er fundet af køres bfs med mål kun mod den tætteset mine,
         //for at opdatere path til den korrekte, så ruten kan genskabes:
-        reset_path(path, mapSize);
+        reset_path(path, mapSize); //Resetter path array til -1
         bfs_find_distance(mapSize, map, deminers[whose_turn].x, deminers[whose_turn].y, shortest_distance_x, shortest_distance_y, path, &path_length);
+        print_path(shortest_distance, path, mapSize, map); //Printer pathen:
+        //Opdaterer deminerens placering, og hvis tur det er:
+        update_deminer(deminers, &whose_turn, shortest_distance, shortest_distance_x, shortest_distance_y, amount_of_deminers);
 
-        //Laver loop, der tilskriver ruten i mappet:
-        for (int step = 0; step < shortest_distance; step++) {
-            int x = path[step][0];
-            int y = path[step][1];
-
-            if (x < 0 || x >= mapSize || y < 0 || y >= mapSize) {
-                printf("Error: Path coordinates out of bounds at step %d: (%d, %d)\n", step, x, y);
-                exit(EXIT_FAILURE);
-            }
-
-            //Det ønskes ikke at overskrive miner, andre deminere og steder, der allerede er placeret explosives:
-            if (map[y * mapSize + x].point_value != MINE_ENUM &&
-                map[y * mapSize + x].point_value != DEMINER_ENUM &&
-                map[y * mapSize + x].point_value != EXPLOSIVE_ENUM) {
-                map[y * mapSize + x].point_value = PATH_ENUM;
-            }
-        }
-
-        deminers[whose_turn].distance += shortest_distance;
-        //printf("So far deminer 0 has walked %d\n", deminers[0].distance);
-        deminers[whose_turn].x = shortest_distance_x; //Flytter demineren
-        deminers[whose_turn].y = shortest_distance_y;
-
-        if (whose_turn < amount_of_deminers - 1) {
-            whose_turn++;
-        } else {
-            whose_turn = 0;
-        }
-
+        //Printer mappet:
         print_map(mapSize, map, deminers, amount_of_deminers);
+
+        //Planter explosive på minens placering
         get_cell(map, mapSize, shortest_distance_y, shortest_distance_x)->point_value = EXPLOSIVE_ENUM;
+
+        //Prompter for trinvis eksekvering af programmet:
         char choice;
         scanf(" %c", &choice);
     }
+
+    //Er alle miner nået flyttes deminersne ud af griddet:
     for (int i = 0; i < amount_of_deminers; i++) {
         deminers[i].x = -1;
         deminers[i].y = -1;
     }
+
+    //Printer mappet en sidste gang uden deminers:
     print_map(mapSize, map, deminers, amount_of_deminers);
     free(path);
 }
