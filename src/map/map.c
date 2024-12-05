@@ -22,6 +22,8 @@ void create_map(int mapSize, mapPoint* map, int* amount_of_mines) {
                 *amount_of_mines++;
             } else if (outcome > 1 && outcome < 5) {
                 cell->point_value = OBSTACLE_ENUM;
+            } else if (outcome > 6 && outcome < 9) {
+                cell->point_value = OBSTACLE_WALKABLE_ENUM;
             } else {
                 cell->point_value = CLEAR_ENUM;
             }
