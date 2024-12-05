@@ -61,8 +61,9 @@ void find_shortest_path (int mapSize, mapPoint* map, int amount_of_deminers, Dem
 /// @param amount_of_mines Bruges til at tælle og returnere antal miner.
 /// @param path Gemmer stien, der bliver gået af BFS.
 /// @param path_length Gemmer længden på stien, der bliver gået.
-void find_closest_mine(int* shortest_distance_x, int* shortest_distance_y, int* shortest_distance, int mapSize, mapPoint* map,
-                       int whose_turn, Deminer* deminers, int* amount_of_mines, int** path, int* path_length);
+/// @param weight Holder vægten for stien
+void find_closest_mine(int* shortest_distance_x, int* shortest_distance_y, int* shortest_distance, int* shortest_distance_weight, int mapSize, mapPoint* map,
+                        int whose_turn, Deminer* deminers, int* amount_of_mines, int** path, int* path_length, int* weight);
 
 /// BFS (Breadth-First-Search) Finder den korteste afstand fra et startpunkt til et slutpunkt, mens den undgår forhindringer.
 /// @param mapsize Bruges som grænse i loops.
@@ -73,8 +74,9 @@ void find_closest_mine(int* shortest_distance_x, int* shortest_distance_y, int* 
 /// @param target_y Mål-positionens y-værdi
 /// @param path 2D-array, der holder stien, der gås af BFS.
 /// @param path_length Holder længden af stien, der bruges til print.
+/// @param weight Holder vægten for stien
 /// @return Returnerer den udregnede afstand.
-int bfs_find_distance(int mapsize, mapPoint* map, int start_x, int start_y, int target_x, int target_y, int** path, int* path_length);
+int bfs_find_distance(int mapsize, mapPoint* map, int start_x, int start_y, int target_x, int target_y, int** path, int* path_length, int* weight);
 
 /// Nulstiller alle stiens værdier til -1.
 /// @param path Bruger stien, for at nulstille den.

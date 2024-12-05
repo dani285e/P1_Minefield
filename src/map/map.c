@@ -50,7 +50,6 @@ void print_map(int mapSize, mapPoint* map, Deminer* deminers, int amount_of_demi
 }
 
 
-
 void check_a_point(int mapSize, mapPoint* map) {
     int current_x;
     int current_y;
