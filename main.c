@@ -83,7 +83,7 @@ int main(void) {
     //int mapSize = (rand()% 20) + 10;
     int mapSize = 20;
     int amount_of_mines = 0;
-    int amount_of_deminers = 3; // SKAL VÆRE GIVET FRA EN ANDEN FUNKTION
+    int amount_of_deminers = 3; //TODO SKAL VÆRE GIVET FRA EN ANDEN FUNKTION
     map = (mapPoint*)malloc(sizeof(mapPoint)*mapSize*mapSize);
     Deminer* deminers = NULL;
     deminers = (Deminer*)malloc(sizeof(Deminer)*amount_of_deminers);
