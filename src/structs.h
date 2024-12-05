@@ -32,16 +32,20 @@ typedef struct Map {
 enum point_value {
     CLEAR_ENUM,          // Represents an empty or clear space
     OBSTACLE_ENUM,       // Represents an obstacle (e.g., a tree or blockage)
+    OBSTACLE_WALKABLE_ENUM,
     MINE_ENUM,           // Represents a mine
-    PATH_ENUM,           // Represents a path
-    HILL_ENUM,           // Represents a hill (highest elevation)
     EXPLOSIVE_ENUM,
     DEMINER_ENUM,
+
+
+    PATH_ENUM,           // Represents a path
     LOWER_ELEVATION_ENUM,// Represents a cell with lower elevation (adjacent to a hill)
-    LESSER_ELEVATION_ENUM// Represents a cell with the lowest elevation
+    LESSER_ELEVATION_ENUM,// Represents a cell with the lowest elevation
+    HILL_ENUM,           // Represents a hill (highest elevation)
+    BLAST_RADIUS_ENUM         // Represents the blast radius of a mine
 };
 
-static char point_value_name[9] = {'C', 'O', 'M', 'P', 'H', 'E', 'D', 'L', 'l'}; // Corresponding characters
+static char point_value_name[11] = {'C', 'X', 'W', 'M', 'E', 'D', 'P', 'L', 'l', 'H', 'B'};
 
 
 typedef struct {

@@ -71,6 +71,7 @@ void move_deminer(mapPoint* map, int mapSize, int x, int y);
 void print_map_info(int mapSize, mapPoint* map);
 int find_closest_deminer(Deminer* deminers, int mapsize, mapPoint* map, int amount_of_deminers, int target_x, int target_y);
 void find_shortest_path (int mapSize, mapPoint* map, int amount_of_deminers, Deminer* deminers);
+void blast_radius(int mapSize, mapPoint* map);
 
 int main(void) {
 
@@ -121,6 +122,7 @@ void move_deminer(mapPoint* map, int mapSize, int x, int y) {
 
 void print_map_info(int mapSize, mapPoint* map) {
     int mineCounter = unit_counter(0, mapSize-1, 0, mapSize-1, map, mapSize, MINE_ENUM);
+    printf("\033[0m");
     printf("\n\n\n");
     printf("There is a total of %d mines there needs to be cleared\n\n", mineCounter);
     printf("They are located at the following points\n");
@@ -159,6 +161,7 @@ void function_find_start_line (int mapSize, mapPoint* map, Deminer* deminers, in
     int right_counter = unit_counter(0, mapSize-1, floor(size/2), mapSize-1, map, mapSize, MINE_ENUM);
     int bottom_counter = unit_counter(floor(size/2), mapSize-1, 0, mapSize-1, map, mapSize, MINE_ENUM);
 
+    printf("\033[0m");
     printf("Top map is %d\n", top_counter);
     printf("Left map is %d\n", left_counter);
     printf("Right map is %d\n", right_counter);
@@ -453,6 +456,7 @@ void find_shortest_path (int mapSize, mapPoint* map, int amount_of_deminers, Dem
     }
 
     //Printer mappet en sidste gang uden deminers:
+    blast_radius(mapSize, map);
     print_map(mapSize, map, deminers, amount_of_deminers);
     free(path);
 }
@@ -460,4 +464,33 @@ void find_shortest_path (int mapSize, mapPoint* map, int amount_of_deminers, Dem
 
 int find_shortest_path_distance_sorter(const void *ep1, const void *ep2) {
     return (int*) ep1 - (int*) ep2;
+}
+
+void blast_radius(int mapSize, mapPoint* map) {
+    for (int y = 0; y < mapSize; y++) { // For loop som kører rundt til alle x værdier
+        for (int x = 0; x < mapSize; x++) { // For loop som kører rundt til alle y værdier
+            mapPoint* cell = get_cell(map, mapSize, y, x); // Kalder structen mapPoint og giver den navnet cell
+
+            if (cell->point_value == EXPLOSIVE_ENUM) { // Hvis det er en mine
+                for (int dy = -1; dy <= 1; dy++) { // Kører for loopet til de omkringliggende arrays om minerne for y
+                    for (int dx = -1; dx <= 1; dx++) { // for x
+                        int new_y = y + dy;
+                        int new_x = x + dx;
+
+                        // Sikre at den er inden for mappet
+                        if (new_y >= 0 && new_y < mapSize && new_x >= 0 && new_x < mapSize) {
+                            mapPoint* surrounding_cell = get_cell(map, mapSize, new_y, new_x);
+
+                            // Kun opdaterer celler der er clear
+                            if (surrounding_cell->point_value == CLEAR_ENUM ||
+                                surrounding_cell->point_value == OBSTACLE_WALKABLE_ENUM ||
+                                surrounding_cell->point_value == OBSTACLE_ENUM) {
+                                surrounding_cell->point_value = BLAST_RADIUS_ENUM;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

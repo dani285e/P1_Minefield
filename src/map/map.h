@@ -1,6 +1,4 @@
-//
-// Created by Danie on 20-11-2024.
-//
+
 
 #ifndef MAP_H
 #define MAP_H
