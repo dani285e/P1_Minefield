@@ -65,7 +65,7 @@ void find_shortest_path (int mapSize, mapPoint* map, int amount_of_deminers, Dem
     int shortest_distance = INT_MAX;
     int shortest_distance_x = 0;
     int shortest_distance_y = 0;
-    int shortest_distance_weight = 0;
+    int shortest_distance_weight = INT_MAX;
     int whose_turn = 0;
     mapPoint* cell;
     //deminer* current_deminer = deminers[0];
@@ -143,7 +143,7 @@ void find_closest_mine(int* shortest_distance_x, int* shortest_distance_y, int* 
     *amount_of_mines = 0;
     *shortest_distance_x = 0;
     *shortest_distance_y = 0;
-    *shortest_distance_weight = 0;
+    *shortest_distance_weight = INT_MAX;
     *shortest_distance = INT_MAX;
 
     for (int y = 0; y < mapSize; y++) {
@@ -159,11 +159,11 @@ void find_closest_mine(int* shortest_distance_x, int* shortest_distance_y, int* 
                     continue;
                 }
                 //TODO Weight need to be implementet correctly
-                if (distance < *shortest_distance) {
+                if (*weight < *shortest_distance_weight) {
+                    *shortest_distance_weight = *weight;
                     *shortest_distance = distance;
                     *shortest_distance_x = x;
                     *shortest_distance_y = y;
-                    *shortest_distance_weight = *weight;
                 }
                 //printf("The distance is %d to mine X:%d, Y:%d\n", distance, x, y);
             }
@@ -210,7 +210,7 @@ int bfs_find_distance(int mapsize, mapPoint* map, int start_x, int start_y, int 
         // Hvis vi har nået målet
         if (x == target_x && y == target_y) {
             *path_length = dist;
-
+            local_weight = dist;
             //Tilbagetracker for at finde ruten:
             int current_x = target_x, current_y = target_y; // Start fra målets koordinater
 
@@ -227,11 +227,9 @@ int bfs_find_distance(int mapsize, mapPoint* map, int start_x, int start_y, int 
 
                     int current_point_value = get_cell(map, mapsize, current_y, current_x)->point_value;
                     if (current_point_value == OBSTACLE_WALKABLE_ENUM) {
-                        local_weight += 2;
-                    } else if (current_point_value == CLEAR_ENUM)
-                    {
-                        local_weight += 1;
+                        local_weight += 3;
                     }
+
 
                     current_x = previous_cell.point_value_x;   // Kolonnen (x-koordinat)
                     current_y = previous_cell.point_value_y;   // Rækken (y-koordinat)
