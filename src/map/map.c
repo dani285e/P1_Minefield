@@ -38,6 +38,8 @@ void initial_print_map(int mapSize, mapPoint* map) {
         }
         printf("\n%s", point_value_color[4]);
     }
+    printf("\033[0m");
+    printf("\n\nThis is a given map of a minefield\n");
 }
 
 
@@ -82,9 +84,8 @@ void check_a_point(int mapSize, mapPoint* map) {
 void print_map_info(int mapSize, mapPoint* map) {
     int mineCounter = unit_counter(0, mapSize-1, 0, mapSize-1, map, mapSize, MINE_ENUM);
     printf("\033[0m");
-    printf("\n\n\n");
-    printf("There is a total of %d mines there needs to be cleared\n\n", mineCounter);
-    printf("They are located at the following points\n");
+    printf("\nThere is a total of %d mines there needs to be cleared\n", mineCounter);
+    printf("They are located at the following points\n\n");
     int counter = 0;
     for(int y = 0; y < mapSize; y++) {
         for (int x = 0; x < mapSize; x++) {
@@ -94,6 +95,7 @@ void print_map_info(int mapSize, mapPoint* map) {
             }
         }
     }
+    printf("\n");
 }
 
 void continue_check() {
@@ -103,4 +105,5 @@ void continue_check() {
             printf("Press c to continue\n");
             scanf(" %c", &choice);
     }
+    printf("\n");
 }

@@ -40,10 +40,6 @@ void function_find_start_line (int mapSize, mapPoint* map, Deminer* deminers, in
     int bottom_counter = unit_counter(floor(size/2), mapSize-1, 0, mapSize-1, map, mapSize, MINE_ENUM);
 
     printf("\033[0m");
-    printf("Top map is %d\n", top_counter);
-    printf("Left map is %d\n", left_counter);
-    printf("Right map is %d\n", right_counter);
-    printf("Bottom map is %d\n", bottom_counter);
 
     int start_line = compare_lines(top_counter, left_counter, right_counter, bottom_counter); // Får værdien 1, 2, 3 eller 4 tilbage fra compare_lines
 
@@ -58,7 +54,7 @@ void function_find_start_line (int mapSize, mapPoint* map, Deminer* deminers, in
         break;
     }
 
-    printf("\nThe start line is: %s\n\n", start_line_name);
+    printf("\nThe starting line for the deminers is: %s\n", start_line_name);
 
 
     startpoint pointList[amount_of_deminers]; // Listen er ligeså lang som mængden af deminers der er
@@ -100,6 +96,6 @@ void function_find_start_line (int mapSize, mapPoint* map, Deminer* deminers, in
         deminers[i].distance = 0;
         deminers[i].time_taken = 0;
 
-        printf("Start point for deminer %d is X:%d, Y:%d\n", i+1, pointList[i].start_point_x, pointList[i].start_point_y);
+        printf("Starting point for deminer %d is X:%d, Y:%d\n", i+1, pointList[i].start_point_x, pointList[i].start_point_y);
     }
 }
