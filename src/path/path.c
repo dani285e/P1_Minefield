@@ -345,6 +345,8 @@ void reset_path(int** path, int mapsize) {
  * @param path Et array af alle x- og y-koordinator med en sti mellem 2 punkter
  * @param mapSize Størrelsen af det kvadratiske kort (f.eks. et kort på 10x10 vil have mapSize = 10).
  * @param map Et array af `mapPoint` strukturer, der indeholder x- og y-koordinater samt point_value for hver celle på kortet.
+ * @param whose_turn Bestemmer hvilke deminer der bliver benyttet
+ * @param time Værdi til hvor lang tid det tager en deminer at fjerne miner
  */
 void print_path(int shortest_distance, int** path, int mapSize, mapPoint* map, Deminer* deminers, int whose_turn, int* time) {
     //Laver loop, der tilskriver ruten i mappet:
