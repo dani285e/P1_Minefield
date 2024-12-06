@@ -36,7 +36,11 @@ void print_map(int mapSize, mapPoint* map, Deminer* deminers, int amount_of_demi
 void print_map_info(int mapSize, mapPoint* map);
 
 
+// Bruges første gang mappet udskrives så vi får et map uden deminers
+void initial_print_map(int mapSize, mapPoint* map);
 
+// Forhindrer programmet i et kører helt færdigt med det samme det køres
+void continue_check();
 
 
 #endif //MAP_H

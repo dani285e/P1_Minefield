@@ -29,6 +29,18 @@ void create_map(int mapSize, mapPoint* map, int* amount_of_mines) {
     }
 }
 
+void initial_print_map(int mapSize, mapPoint* map) {
+    mapPoint* cell;
+    for (int y = 0; y < mapSize; y++) {
+        for (int x = 0; x < mapSize; x++) {
+            cell = get_cell(map, mapSize, y, x);
+            printf("%s%3c",point_value_color[cell->point_value], point_value_name[cell->point_value]);
+        }
+        printf("\n%s", point_value_color[4]);
+    }
+}
+
+
 void print_map(int mapSize, mapPoint* map, Deminer* deminers, int amount_of_deminers) {
     mapPoint* cell;
     for (int y = 0; y < mapSize; y++) {
@@ -81,5 +93,14 @@ void print_map_info(int mapSize, mapPoint* map) {
                 printf("Mine %-2d is located at point X = %-2d, Y = %d\n", counter, x, y);
             }
         }
+    }
+}
+
+void continue_check() {
+    printf("\033[0m");
+    int choice = 0;
+    while (choice != 1) {
+        printf("Press 1 to continue\n");
+        scanf("%d", &choice);
     }
 }

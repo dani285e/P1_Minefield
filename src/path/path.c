@@ -99,7 +99,7 @@ void find_shortest_path (int mapSize, mapPoint* map, int amount_of_deminers, Dem
         //for at opdatere path til den korrekte, så ruten kan genskabes:
         reset_path(path, mapSize); //Resetter path array til -1
         bfs_find_distance(mapSize, map, deminers[whose_turn].x, deminers[whose_turn].y, shortest_distance_x, shortest_distance_y, path, &path_length, &weight);
-        printf("The shortest distance is %d to mine X:%d, Y:%d, deminer %d moves.\n", path_length, shortest_distance_x, shortest_distance_y, whose_turn + 1);
+        printf("The shortest distance to a mine is %d to mine X:%d, Y:%d, deminer %d moves.\n", path_length, shortest_distance_x, shortest_distance_y, whose_turn + 1);
         printf("The weight is: %d\n", weight);
         print_path(shortest_distance, path, mapSize, map); //Printer pathen:
 
@@ -115,6 +115,7 @@ void find_shortest_path (int mapSize, mapPoint* map, int amount_of_deminers, Dem
         // //Prompter for trinvis eksekvering af programmet:
         // char choice;
         // scanf(" %c", &choice);
+        continue_check();
     }
 
     //Er alle miner nået flyttes deminerne ud af griddet:
@@ -129,6 +130,7 @@ void find_shortest_path (int mapSize, mapPoint* map, int amount_of_deminers, Dem
     free(path);
 
     printf("\033[0m");
+    printf("\nAll mines have been reached!\n");
     int total_distance = 0;
     for (int i = 0; i < amount_of_deminers; i++) {
         printf("Total distance walked for deminer %d is %d\n", i+1,  deminers[i].distance);
