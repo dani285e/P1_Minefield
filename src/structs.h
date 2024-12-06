@@ -45,7 +45,7 @@ enum point_value {
     BLAST_RADIUS_ENUM         // Represents the blast radius of a mine
 };
 
-static char point_value_name[11] = {' ', '#', 'W', 'M', 'O', 'D', '.', 'L', 'l', 'H', 'B'};
+static char point_value_name[11] = {'.', 'X', 'W', 'M', 'E', 'D', '*', 'L', 'l', 'H', 'B'};
 
 
 typedef struct {

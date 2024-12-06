@@ -1,4 +1,5 @@
 #include "src/path/start_point/start_point.h"
+#include "string.h"
 
 // Funktion search_map der tager 5 ints og en pointer til map paremeter
 int unit_counter(int y_1, int y_2, int x_1, int x_2, mapPoint* map, int mapSize, int unit)
@@ -32,6 +33,7 @@ int compare_lines(int counter1, int counter2, int counter3, int counter4) {
 
 void function_find_start_line (int mapSize, mapPoint* map, Deminer* deminers, int amount_of_deminers) {
     double size = mapSize;
+    char start_line_name[20];
     int top_counter = unit_counter(0, ceil(size/2)-1, 0, mapSize-1, map, mapSize, MINE_ENUM);
     int left_counter = unit_counter(0, mapSize-1, 0, ceil(size/2)-1, map, mapSize, MINE_ENUM);
     int right_counter = unit_counter(0, mapSize-1, floor(size/2), mapSize-1, map, mapSize, MINE_ENUM);
@@ -44,7 +46,20 @@ void function_find_start_line (int mapSize, mapPoint* map, Deminer* deminers, in
     printf("Bottom map is %d\n", bottom_counter);
 
     int start_line = compare_lines(top_counter, left_counter, right_counter, bottom_counter); // Får værdien 1, 2, 3 eller 4 tilbage fra compare_lines
-    printf("\nThe start line is: Line %d\n\n", start_line);
+
+    switch (start_line) {
+        case 1: strcpy(start_line_name, "Top line");
+        break;
+        case 2: strcpy(start_line_name, "Left line");
+        break;
+        case 3: strcpy(start_line_name, "Right line");
+        break;
+        case 4: strcpy(start_line_name, "Bottom line");
+        break;
+    }
+
+    printf("\nThe start line is: %s\n\n", start_line_name);
+
 
     startpoint pointList[amount_of_deminers]; // Listen er ligeså lang som mængden af deminers der er
 
