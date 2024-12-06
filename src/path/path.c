@@ -359,6 +359,9 @@ void print_path(int shortest_distance, int** path, int mapSize, mapPoint* map, D
         }
 
         int current_point_value = get_cell(map, mapSize, y, x)->point_value;
+        if (step == 0 && current_point_value == MINE_ENUM) {
+            *time = 5;
+        }
         if (step != 0) {
             switch (current_point_value) {
                 case CLEAR_ENUM:
