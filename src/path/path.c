@@ -60,6 +60,16 @@ void free_queue(Queue* queue) {
 // Så skal den kunne vidde afstanden til alle andre miner
 // Så skal den vælge den mine der er tættest på og gå hen til den og punktets værdi sættes til 'E'
 // Så skal den gøre det hele igen indtil der ikke er flere miner
+
+/**
+ * Funktion til at finde og navigere med den korteste rute for deminere, for at rydde miner på et givet kort.
+ * Deminerne arbejder i en rotation og finder den nærmeste mine til dem og navigere mod den ved hjælp af BFS.
+ *
+ * @param mapSize Størrelsen af det kvadratiske kort (f.eks. et kort på 10x10 vil have mapSize = 10).
+ * @param map Et array af `mapPoint` strukturer, der indeholder x- og y-koordinater samt point_value for hver celle på kortet.
+ * @param amount_of_deminers Antallet af deminere, der deltager i rydningen.
+ * @param deminers Et array af `Deminer` strukturer, som indeholder den nuværende position og den afstand, hver deminer har tilbagelagt.
+ */
 void find_shortest_path (int mapSize, mapPoint* map, int amount_of_deminers, Deminer* deminers) {
     int amount_of_mines = -1;
     int shortest_distance = INT_MAX;
@@ -139,8 +149,23 @@ void find_shortest_path (int mapSize, mapPoint* map, int amount_of_deminers, Dem
     printf("Total distance walked all deminers is %d\n", total_distance);
 }
 
+/**
+ *
+ * @param shortest_distance_x Pointer med den korteste x afstand
+ * @param shortest_distance_y Pointer med den korteste y afstand
+ * @param shortest_distance Pointer med den korteste afstand mellem start og slut position
+ * @param shortest_distance_weight Pointer med den lavest vægt i forhold til afstand
+ * @param mapSize Størrelsen af det kvadratiske kort (f.eks. et kort på 10x10 vil have mapSize = 10).
+ * @param map Et array af `mapPoint` strukturer, der indeholder x- og y-koordinater samt point_value for hver celle på kortet.
+ * @param whose_turn Bestemmer hvilke deminer der bliver benyttet
+ * @param deminers Et array af `Deminer` strukturer, som indeholder den nuværende position og den afstand, hver deminer har tilbagelagt.
+ * @param amount_of_mines Antallet af deminere, der deltager i rydningen.
+ * @param path Et array af alle x- og y-koordinator med en sti mellem 2 punkter
+ * @param path_length Længden af path
+ * @param weight Pointer med vægt til algorithmen til at finde den korteste rute
+ */
 void find_closest_mine(int* shortest_distance_x, int* shortest_distance_y, int* shortest_distance, int* shortest_distance_weight, int mapSize, mapPoint* map,
-                        int whose_turn, Deminer* deminers, int* amount_of_mines, int** path, int* path_length, int* weight) {
+                       int whose_turn, Deminer* deminers, int* amount_of_mines, int** path, int* path_length, int* weight) {
     *weight = 0;
     *amount_of_mines = 0;
     *shortest_distance_x = 0;
@@ -175,6 +200,23 @@ void find_closest_mine(int* shortest_distance_x, int* shortest_distance_y, int* 
     printf("The weight is: %d\n", *weight);
 }
 
+
+/**
+ * Beregner den korteste rute fra startpositionen til målpositionen på et kvadratisk kort
+ * ved hjælp af breadth-first search (BFS) algoritmen. Stien og dens længde gemmes i
+ * de angivne variabler, og den totale vægt af stien beregnes.
+ *
+ * @param mapsize Størrelsen af det kvadratiske kort (f.eks. et kort på 10x10 vil have mapsize = 10).
+ * @param map Et array af `mapPoint` strukturer, som indeholder x- og y-koordinater samt point_value for hver celle på kortet.
+ * @param start_x X-koordinaten for startpositionen (deminerens startpunkt).
+ * @param start_y Y-koordinaten for startpositionen.
+ * @param target_x X-koordinaten for slutpunktet (målpositionen).
+ * @param target_y Y-koordinaten for slutpunktet.
+ * @param path Et array, hvor ruten fra start til mål gemmes som en sekvens af x- og y-koordinater.
+ * @param path_length Længden af den beregnede sti (antal trin fra start til mål).
+ * @param weight En pointer til variablen, der gemmer den totale vægt af stien, der beregnes ud fra forhindringer.
+ * @return Den korteste afstand fra start til mål i antal trin. Hvis målet ikke kan nås, returneres -1.
+ */
 int bfs_find_distance(int mapsize, mapPoint* map, int start_x, int start_y, int target_x, int target_y, int** path, int* path_length, int* weight) {
     *weight = 0;
     int local_weight = 0;
@@ -277,7 +319,13 @@ int bfs_find_distance(int mapsize, mapPoint* map, int start_x, int start_y, int 
     return -1; // Returner -1, hvis målet ikke kan nås
 }
 
-
+/**
+ * Nulstiller værdierne i path-arrayet. Hver position i path sættes til -1 for at indikere, at der ikke er nogen sti til den pågældende position.
+ * Dette bruges til at nulstille path-arrayet så det efterfølgende kan beregne efterfølgende 'path' uden gamle værdier.
+ *
+ * @param path Et array, hvor ruten fra start til mål gemmes som en sekvens af x- og y-koordinater.
+ * @param mapsize Størrelsen af det kvadratiske kort (f.eks. et kort på 10x10 vil have mapsize = 10).
+ */
 void reset_path(int** path, int mapsize) {
     //Resetter path-arrayet:
     for (int i = 0; i < mapsize * mapsize; i++) {
@@ -287,6 +335,16 @@ void reset_path(int** path, int mapsize) {
     }
 }
 
+
+/**
+ * Denne funktion tager en sti og markerer den på et kort, ved at ændre point_value for hver celle på stien.
+ * Den kontrollerer også, om koordinaterne er indenfor kortets grænser og om cellen allerede er et minefelt, deminers sted eller et eksplosivt område.
+ *
+ * @param shortest_distance Pointer med den korteste afstand mellem start og slut position
+ * @param path Et array af alle x- og y-koordinator med en sti mellem 2 punkter
+ * @param mapSize Størrelsen af det kvadratiske kort (f.eks. et kort på 10x10 vil have mapSize = 10).
+ * @param map Et array af `mapPoint` strukturer, der indeholder x- og y-koordinater samt point_value for hver celle på kortet.
+ */
 void print_path(int shortest_distance, int** path, int mapSize, mapPoint* map) {
     //Laver loop, der tilskriver ruten i mappet:
     for (int step = 0; step < shortest_distance; step++) {
@@ -307,6 +365,15 @@ void print_path(int shortest_distance, int** path, int mapSize, mapPoint* map) {
     }
 }
 
+/**
+ * 
+ * @param deminers Et array af `Deminer` strukturer, som indeholder den nuværende position og den afstand, hver deminer har tilbagelagt.
+ * @param whose_turn Bestemmer hvilke deminer der bliver benyttet
+ * @param shortest_distance Pointer med den korteste afstand mellem start og slut position
+ * @param shortest_distance_x Pointer med den korteste x afstand
+ * @param shortest_distance_y Pointer med den korteste y afstand
+ * @param amount_of_deminers Antallet af deminere, der deltager i rydningen.
+ */
 void update_deminer(Deminer* deminers, int* whose_turn, int shortest_distance, int shortest_distance_x, int shortest_distance_y, int amount_of_deminers) {
     deminers[*whose_turn].distance += shortest_distance;
     //printf("So far deminer 0 has walked %d\n", deminers[0].distance);

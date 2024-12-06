@@ -16,18 +16,11 @@ typedef struct Queue {
     QueueNode* rear;
 } Queue;
 
-
 typedef struct {
     int x;
     int y;
     int distance;
 } Deminer;
-
-typedef struct Map {
-    int x;
-    int y;
-    char obstacle;
-}map;
 
 enum point_value {
     CLEAR_ENUM,          // Represents an empty or clear space
