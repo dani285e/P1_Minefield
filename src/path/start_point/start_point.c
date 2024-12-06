@@ -98,6 +98,7 @@ void function_find_start_line (int mapSize, mapPoint* map, Deminer* deminers, in
         deminers[i].x = pointList[i].start_point_x;
         deminers[i].y = pointList[i].start_point_y;
         deminers[i].distance = 0;
+        deminers[i].time_taken = 0;
 
         printf("Start point for deminer %d is X:%d, Y:%d\n", i+1, pointList[i].start_point_x, pointList[i].start_point_y);
     }

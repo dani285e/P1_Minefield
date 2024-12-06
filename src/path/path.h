@@ -88,7 +88,10 @@ void reset_path(int** path, int mapsize);
 /// @param path Bruger path-array for x- og y-værdier til stien.
 /// @param mapSize Bruger mapSize til kontrol af punkter, og indeksering af map[y * mapSize + x]
 /// @param map Indskriver stien i mappet.
-void print_path(int path_length, int** path, int mapSize, mapPoint* map);
+/// @param deminers Bruges til at addere tid til demineren.
+/// @param whose_turn Bruges til at addere tid til den rigtige deminer.
+/// @param time Holder styr på tiden, for hver enkelt rute.
+void print_path(int shortest_distance, int** path, int mapSize, mapPoint* map, Deminer* deminers, int whose_turn, int* time);
 
 /// Opdaterer deminernes lokation og, hvis tur det er til at rykke.
 /// @param deminers Bruger deminers-arrayet til at tillægge den allerede-gået distance og ændre deminerens lokation.

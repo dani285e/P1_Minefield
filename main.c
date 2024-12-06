@@ -28,6 +28,7 @@ int main(void) {
     initial_print_map(mapSize, map);
     continue_check();
     function_find_start_line(mapSize, map, deminers, amount_of_deminers);
+    print_map(mapSize, map, deminers, amount_of_deminers);
     continue_check();
     print_map_info(mapSize, map);
     find_shortest_path(mapSize, map, amount_of_deminers, deminers);

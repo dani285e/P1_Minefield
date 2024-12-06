@@ -98,9 +98,9 @@ void print_map_info(int mapSize, mapPoint* map) {
 
 void continue_check() {
     printf("\033[0m");
-    int choice = 0;
-    while (choice != 1) {
-        printf("Press 1 to continue\n");
-        scanf("%d", &choice);
+    int choice = 'b';
+    while (choice != 'c') {
+            printf("Press c to continue\n");
+            scanf(" %c", &choice);
     }
 }
