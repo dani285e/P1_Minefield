@@ -4,6 +4,8 @@
 
 #ifndef STRUCTS_H
 #define STRUCTS_H
+
+/// Struct, der holder styr på kø-noderne
 typedef struct QueueNode {
     int x;
     int y;
@@ -11,24 +13,21 @@ typedef struct QueueNode {
     struct QueueNode* next;
 } QueueNode;
 
+/// Struct, der holder køen, med to pointere, forrest og bagerst (front & rear)
 typedef struct Queue {
     QueueNode* front;
     QueueNode* rear;
 } Queue;
 
-
+/// Deminer-struct holder lokation, x, y og distance travelled.
 typedef struct {
     int x;
     int y;
     int distance;
+    int time_taken;
 } Deminer;
 
-typedef struct Map {
-    int x;
-    int y;
-    char obstacle;
-}map;
-
+/// ENUM, der holder point-values, altså hvad der ligger på en given celle, OBSTACLE, CLEAR osv..
 enum point_value {
     CLEAR_ENUM,          // Represents an empty or clear space
     OBSTACLE_ENUM,       // Represents an obstacle (e.g., a tree or blockage)
@@ -45,15 +44,17 @@ enum point_value {
     BLAST_RADIUS_ENUM         // Represents the blast radius of a mine
 };
 
+/// Array, der holder værdier til print for pointvalues.
 static char point_value_name[11] = {'.', 'X', 'W', 'M', 'E', 'D', '*', 'L', 'l', 'H', 'B'};
 
-
+/// mapPoint, der holder styr over punkterne i mappet, indeholder lokation, x,y og pointvalue.
 typedef struct {
     int point_value_x;
     int point_value_y;
     enum point_value point_value;
 } mapPoint;
 
+/// startpoint holder startpunkter
 typedef struct {
     int start_point_x;
     int start_point_y;

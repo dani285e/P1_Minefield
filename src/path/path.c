@@ -1,5 +1,6 @@
 #include "path.h"
 
+#include "src/deminers/deminers.h"
 
 
 Queue* create_queue() {
@@ -67,6 +68,7 @@ void find_shortest_path (int mapSize, mapPoint* map, int amount_of_deminers, Dem
     int shortest_distance_y = 0;
     int shortest_distance_weight = INT_MAX;
     int whose_turn = 0;
+    int time = 0;
     mapPoint* cell;
     //deminer* current_deminer = deminers[0];
 
@@ -94,14 +96,16 @@ void find_shortest_path (int mapSize, mapPoint* map, int amount_of_deminers, Dem
                             deminers, &amount_of_mines, path, &path_length, &weight);
 
 
+        //Nulstiller tid for deminers
 
-        //Efter den tætteste mine er fundet af køres bfs med mål kun mod den tætteset mine,
+        //Efter den tætteste mine er fundet af køres bfs med mål kun mod den tætteste mine,
         //for at opdatere path til den korrekte, så ruten kan genskabes:
+
         reset_path(path, mapSize); //Resetter path array til -1
         bfs_find_distance(mapSize, map, deminers[whose_turn].x, deminers[whose_turn].y, shortest_distance_x, shortest_distance_y, path, &path_length, &weight);
-        printf("The shortest distance to a mine is %d to mine X:%d, Y:%d, deminer %d moves.\n", path_length, shortest_distance_x, shortest_distance_y, whose_turn + 1);
+        print_path(shortest_distance, path, mapSize, map, deminers, whose_turn, &time); //Printer pathen og opdaterer tid for deminers:
+        printf("The shortest distance to a mine is %d to mine X:%d, Y:%d, deminer %d moves. It takes %d minutes\n", path_length, shortest_distance_x, shortest_distance_y, whose_turn + 1, time);
         printf("The weight is: %d\n", weight);
-        print_path(shortest_distance, path, mapSize, map); //Printer pathen:
 
         //Opdaterer deminerens placering, og hvis tur det er, så samme deminer ikke også går næste gang:
         update_deminer(deminers, &whose_turn, shortest_distance, shortest_distance_x, shortest_distance_y, amount_of_deminers);
@@ -132,11 +136,14 @@ void find_shortest_path (int mapSize, mapPoint* map, int amount_of_deminers, Dem
     printf("\033[0m");
     printf("\nAll mines have been reached!\n");
     int total_distance = 0;
+    int total_time = 0;
     for (int i = 0; i < amount_of_deminers; i++) {
-        printf("Total distance walked for deminer %d is %d\n", i+1,  deminers[i].distance);
+        printf("Total distance walked for deminer %d is %d, it took %d minutes\n", i+1,  deminers[i].distance, deminers[i].time_taken);
         total_distance += deminers[i].distance;
+        total_time += deminers[i].time_taken;
     }
     printf("Total distance walked all deminers is %d\n", total_distance);
+    printf("Total time spent by all deminers is %d minutes\n", total_time);
 }
 
 void find_closest_mine(int* shortest_distance_x, int* shortest_distance_y, int* shortest_distance, int* shortest_distance_weight, int mapSize, mapPoint* map,
@@ -225,13 +232,11 @@ int bfs_find_distance(int mapsize, mapPoint* map, int start_x, int start_y, int 
                     path[step][0] = current_x;
                     path[step][1] = current_y;
 
-                    //printf("Path for Deminer %d:\n", );
-
                     int current_point_value = get_cell(map, mapsize, current_y, current_x)->point_value;
+
                     if (current_point_value == OBSTACLE_WALKABLE_ENUM) {
                         local_weight += 3;
                     }
-
 
                     current_x = previous_cell.point_value_x;   // Kolonnen (x-koordinat)
                     current_y = previous_cell.point_value_y;   // Rækken (y-koordinat)
@@ -287,15 +292,37 @@ void reset_path(int** path, int mapsize) {
     }
 }
 
-void print_path(int shortest_distance, int** path, int mapSize, mapPoint* map) {
+void print_path(int shortest_distance, int** path, int mapSize, mapPoint* map, Deminer* deminers, int whose_turn, int* time) {
     //Laver loop, der tilskriver ruten i mappet:
-    for (int step = 0; step < shortest_distance; step++) {
+    *time = 0;
+    for (int step = 0; step <= shortest_distance; step++) {
         int x = path[step][0];
         int y = path[step][1];
 
         if (x < 0 || x >= mapSize || y < 0 || y >= mapSize) {
             printf("Error: Path coordinates out of bounds at step %d: (%d, %d)\n", step, x, y);
             exit(EXIT_FAILURE);
+        }
+
+        int current_point_value = get_cell(map, mapSize, y, x)->point_value;
+        if (step != 0) {
+            switch (current_point_value) {
+                case CLEAR_ENUM:
+                    *time += 1;
+                    deminers[whose_turn].time_taken += 1;
+                    break;
+                case PATH_ENUM:
+                    *time += 1;
+                    deminers[whose_turn].time_taken += 1;
+                case OBSTACLE_WALKABLE_ENUM:
+                    *time += 2;
+                    deminers[whose_turn].time_taken += 2;
+                    break;
+                case MINE_ENUM:
+                    *time += 5;
+                    deminers[whose_turn].time_taken += 5;
+                    break;
+            }
         }
 
         //Det ønskes ikke at overskrive miner, andre deminere og steder, der allerede er placeret explosives:
