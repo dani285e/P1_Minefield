@@ -65,6 +65,7 @@ void print_map_info(int mapSize, mapPoint* map) {
     int mineCounter = unit_counter(0, mapSize-1, 0, mapSize-1, map, mapSize, MINE_ENUM);
     printf("\033[0m");
     printf("This is a given map of a minefield\n");
+    printf("It has the size %d * %d\n", mapSize, mapSize);
     printf("\033[0;32m'.' is a Clear Tile\n");
     printf("\033[0;36m'W' is a Walkable Obstacle Tile\n");
     printf("\033[0;33m'X' is a NON-Walkable Obstacle Tile\n");

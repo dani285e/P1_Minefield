@@ -16,14 +16,15 @@ int main(void) {
     srand(time(NULL));
 
     mapPoint* map = NULL;
-    //int mapSize = (rand()% 20) + 10;
-    int mapSize = 20;
+    //int mapSize = (rand()% 11) + 20;
+    int mapSize = 50;
     int amount_of_mines = 0;
     int amount_of_deminers = 3; //TODO SKAL VÆRE GIVET FRA EN ANDEN FUNKTION
+    int quick_run = 2;
     map = (mapPoint*)malloc(sizeof(mapPoint)*mapSize*mapSize);
     Deminer* deminers = NULL;
     deminers = (Deminer*)malloc(sizeof(Deminer)*amount_of_deminers);
-
+    continue_check();
     create_map(mapSize, map, &amount_of_mines);
     initial_print_map(mapSize, map);
     continue_check();
@@ -31,8 +32,12 @@ int main(void) {
     continue_check();
     function_find_start_line(mapSize, map, deminers, amount_of_deminers);
     print_map(mapSize, map, deminers, amount_of_deminers);
-    continue_check();
-    find_shortest_path(mapSize, map, amount_of_deminers, deminers);
+    while (quick_run != 1 && quick_run != 0) {
+        printf("\033[0m");
+        printf("Select run mode:\nQuick run (press 1)\nRegular run (press 0)\n");
+        scanf("%d", &quick_run);
+    }
+    find_shortest_path(mapSize, map, amount_of_deminers, deminers, quick_run);
 
     free(map);
     free(deminers);

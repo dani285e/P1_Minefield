@@ -70,7 +70,7 @@ void free_queue(Queue* queue) {
  * @param amount_of_deminers Antallet af deminere, der deltager i rydningen.
  * @param deminers Et array af `Deminer` strukturer, som indeholder den nuværende position og den afstand, hver deminer har tilbagelagt.
  */
-void find_shortest_path (int mapSize, mapPoint* map, int amount_of_deminers, Deminer* deminers) {
+void find_shortest_path (int mapSize, mapPoint* map, int amount_of_deminers, Deminer* deminers, int quick_run) {
     int amount_of_mines = -1;
     int shortest_distance = INT_MAX;
     int shortest_distance_x = 0;
@@ -113,13 +113,17 @@ void find_shortest_path (int mapSize, mapPoint* map, int amount_of_deminers, Dem
         reset_path(path, mapSize); //Resetter path array til -1
         bfs_find_distance(mapSize, map, deminers[whose_turn].x, deminers[whose_turn].y, shortest_distance_x, shortest_distance_y, path, &path_length, &weight);
         print_path(shortest_distance, path, mapSize, map, deminers, whose_turn, &time); //Printer pathen og opdaterer tid for deminers:
-        printf("The shortest distance to a mine is %d\nThe mine is located at X:%d, Y:%d\nDeminer %d moves\nIt takes %d minutes to reach the mine and plant an explosive\n", path_length, shortest_distance_x, shortest_distance_y, whose_turn + 1, time);
+        if (quick_run == 0) {
+            printf("The shortest distance to a mine is %d\nThe mine is located at X:%d, Y:%d\nDeminer %d moves\nIt takes %d minutes to reach the mine and plant an explosive\n", path_length, shortest_distance_x, shortest_distance_y, whose_turn + 1, time);
+        }
 
         //Opdaterer deminerens placering, og hvis tur det er, så samme deminer ikke også går næste gang:
         update_deminer(deminers, &whose_turn, shortest_distance, shortest_distance_x, shortest_distance_y, amount_of_deminers);
 
         //Printer mappet:
-        print_map(mapSize, map, deminers, amount_of_deminers);
+        if (quick_run == 0) {
+            print_map(mapSize, map, deminers, amount_of_deminers);
+        }
 
         //Planter explosive på minens placering
         get_cell(map, mapSize, shortest_distance_y, shortest_distance_x)->point_value = EXPLOSIVE_ENUM;
@@ -127,7 +131,9 @@ void find_shortest_path (int mapSize, mapPoint* map, int amount_of_deminers, Dem
         // //Prompter for trinvis eksekvering af programmet:
         // char choice;
         // scanf(" %c", &choice);
-        continue_check();
+        if (quick_run == 0) {
+            continue_check();
+        }
     }
 
     //Er alle miner nået flyttes deminerne ud af griddet:
