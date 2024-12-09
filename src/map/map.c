@@ -38,8 +38,6 @@ void initial_print_map(int mapSize, mapPoint* map) {
         }
         printf("\n%s", point_value_color[4]);
     }
-    printf("\033[0m");
-    printf("\n\nThis is a given map of a minefield\n");
 }
 
 
@@ -63,27 +61,18 @@ void print_map(int mapSize, mapPoint* map, Deminer* deminers, int amount_of_demi
     }
 }
 
-
-void check_a_point(int mapSize, mapPoint* map) {
-    int current_x;
-    int current_y;
-    printf("\nCheck the value at a certain point by entering a X and Y coordinate\n");
-    scanf("%d", &current_x);
-    scanf("%d", &current_y);
-    if(current_x < 0 || current_x >= mapSize || current_y < 0 || current_y >= mapSize) {
-        printf("Cant access a point is outside of the map\n");
-    } else {
-        printf("At point X:%d, Y:%d there is located %c",
-        get_cell(map, mapSize, current_y, current_x)->point_value_x,
-        get_cell(map, mapSize, current_y, current_x)->point_value_y,
-        point_value_name[get_cell(map, mapSize, current_y, current_x)->point_value]);
-    }
-}
-
-
 void print_map_info(int mapSize, mapPoint* map) {
     int mineCounter = unit_counter(0, mapSize-1, 0, mapSize-1, map, mapSize, MINE_ENUM);
     printf("\033[0m");
+    printf("This is a given map of a minefield\n");
+    printf("\033[0;32m'.' is a Clear Tile\n");
+    printf("\033[0;36m'W' is a Walkable Obstacle Tile\n");
+    printf("\033[0;33m'X' is a NON-Walkable Obstacle Tile\n");
+    printf("\033[0;31m'M' is a Mine\n");
+    printf("\033[0;34m'E' is an Explosive\n");
+    printf("\033[0;35m'B' is the Blast Radius\n");
+    printf("\033[0m'Numbers' are deminers on the map ranging from 1 to n\n");
+    printf("\033[0m'*' is a Path walked on by a deminer\n\n");
     printf("\nThere is a total of %d mines there needs to be cleared\n", mineCounter);
     printf("They are located at the following points\n\n");
     int counter = 0;
@@ -99,7 +88,7 @@ void print_map_info(int mapSize, mapPoint* map) {
 }
 
 void continue_check() {
-    printf("\033[0m");
+    printf("\n\033[0m");
     int choice = 'b';
     while (choice != 'c') {
             printf("Press c to continue\n");
