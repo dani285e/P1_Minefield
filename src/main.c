@@ -1,7 +1,7 @@
-#include "src//deminers/deminers.h"
-#include "src/path/path.h"
-#include "src/map/map.h"
-#include "src/path/start_point/start_point.h"
+#include "deminers/deminers.h"
+#include "path/path.h"
+#include "map/map.h"
+#include "path/start_point/start_point.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -39,13 +39,3 @@ int main(void) {
 
     return 0;
 }
-
-
-
-
-
-
-
-
-
-

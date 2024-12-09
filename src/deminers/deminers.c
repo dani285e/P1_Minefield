@@ -3,6 +3,7 @@
 #include <time.h>
 #include "deminers.h"
 
+#include "src/structs.h"
 
 
 int deminer() { //this is a replacement for the fake int main(void) function that was here previously, runs the rest of the file - call it w/e or write it out
@@ -59,7 +60,6 @@ int deminer() { //this is a replacement for the fake int main(void) function tha
 
     return 0;
 }
-
 
 void create_temproute(int mapSize, mapPoint** temp_route) {
     //char* cell; // Cell er en pointer til en char
@@ -129,7 +129,6 @@ void create_elevation_map(int mapSize, mapPoint** elevation_map) {
     }
 }
 
-
 int get_deminers(mapPoint* map, int mapSize) {
     int mineCounter = 0;
     for (int y = 0; y < mapSize; y++) {
@@ -156,10 +155,6 @@ int get_deminers(mapPoint* map, int mapSize) {
 
     return 1; //default minimum amount of deminers needed
 }
-
-
-
-
 
 double cell_time(mapPoint* map, int mapSize, mapPoint* route, mapPoint* elevation_map, int y, int x) {
     //check the route map if the cell is part of the path
