@@ -1,4 +1,20 @@
-#include "test_path.h"
+#include "../src/path/path.h"
+#include <assert.h>
+
+void test_unit_counter();
+void test_compare_lines();
+void test_find_start_line();
+
+
+int main(void) {
+
+    test_find_start_line();
+    test_unit_counter();
+    test_compare_lines();
+
+    return 0;
+}
+
 
 
 // START POINT / LINE

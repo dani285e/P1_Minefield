@@ -2,11 +2,13 @@
 
 #ifndef MAP_H
 #define MAP_H
-#include "src/structs.h"
-#include "src/map/colour/colour.h"
-#include "src/path/start_point/start_point.h"
+
+
 #include <stdio.h>
 #include <stdlib.h>
+#include "src/path/start_point/start_point.h"
+#include "src/map/colour/colour.h"
+#include "src/structs.h"
 
 
 /// Giver en pointer til en celle, ud fra mappet, mapsize og cellens x- og y-værdi.

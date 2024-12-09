@@ -1,11 +1,21 @@
-//
-// Created by danie on 09-12-2024.
-//
-
-#include "test_map.h"
+#include "../src/map/map.h"
+#include <assert.h>
 
 
+void test_get_cell();
+void test_create_map();
 
+
+
+
+
+int main(void) {
+
+    test_get_cell();
+    test_create_map();
+
+    return 0;
+}
 
 void test_get_cell()
 {

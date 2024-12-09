@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <math.h>
 #include "src/map/map.h"
+#include "src/structs.h"
 
 ///
 /// @param y_1

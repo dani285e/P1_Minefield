@@ -1,10 +1,19 @@
-//
-// Created by danie on 09-12-2024.
-//
+#include <assert.h>
+#include <stddef.h>
+#include <stdlib.h>
+#include "../src/blast_radius/blast_radius.h"
+#include "src/map/map.h"
 
-#include "test/test_blast_radius.h"
+
+void test_blast_radius_func(void);
 
 
+int main(void) {
+
+    test_blast_radius_func();
+
+    return 0;
+}
 
 
 void test_blast_radius_func(void)
