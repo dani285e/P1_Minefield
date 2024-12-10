@@ -26,7 +26,7 @@ void test_get_cell()
     map = (mapPoint*)malloc(sizeof(mapPoint)*mapSize*mapSize);
     create_map(mapSize, map, &amount_of_mines);
 
-    int x = 5;
+    int x = 2;
     int y = 5;
     mapPoint* cell = get_cell(map, mapSize, y, x);
 

@@ -6,19 +6,11 @@ void test_compare_lines();
 void test_find_start_line();
 
 int main(void) {
-
     test_find_start_line();
     test_unit_counter();
     test_compare_lines();
-
     return 0;
 }
-
-
-
-
-
-
 
 // START POINT / LINE
 void test_unit_counter()
@@ -53,7 +45,7 @@ void test_find_start_line()
 
     Deminer deminers[3];
     int amount_of_deminers = 3;
-    for (int i = 1; i < amount_of_deminers; i++)
+    for (int i = 0; i < amount_of_deminers; i++)
     {
         deminers[i].x = -1;
         deminers[i].y = -1;
@@ -69,6 +61,48 @@ void test_find_start_line()
     printf("right counter: %d\n", right_counter);
     printf("bottom_counter: %d\n", bottom_counter);
 
-
     function_find_start_line(mapSize, map, deminers, amount_of_deminers);
+    int start_line = compare_lines(top_counter, left_counter, right_counter, bottom_counter);
+    int deminers_placed = 0;
+
+    for (int i = 0; i < amount_of_deminers; i++)
+    {
+        switch (start_line)
+        {
+            case 1:
+                if (deminers[i].x >= 0 &&
+                    deminers[i].x < mapSize &&
+                    deminers[i].y == 0)
+                {
+                    deminers_placed++;
+                }
+                break;
+            case 2:
+                if (deminers[i].x == 0 &&
+                    deminers[i].y >= 0 &&
+                    deminers[i].y < mapSize)
+                {
+                    deminers_placed++;
+                }
+                break;
+            case 3:
+                if (deminers[i].x == mapSize-1 &&
+                    deminers[i].y >= 0 &&
+                    deminers[i].y < mapSize)
+                {
+                    deminers_placed++;
+                }
+                break;
+            case 4:
+                if (deminers[i].x >= 0 &&
+                    deminers[i].x < mapSize &&
+                    deminers[i].y == mapSize-1)
+                {
+                    deminers_placed++;
+                }
+                break;
+            default: printf("How did you get here. Im a test and you dont have a startline between 1-4\n");
+        }
+    }
+    assert(deminers_placed == amount_of_deminers);
 }
