@@ -48,9 +48,10 @@ void test_blast_radius_func(void)
                 {
                     for (int dx = x-1; dx <= x+1; dx++)
                     {
-                        if (dx >= 0 && dy >= 0)
+                        if (dx >= 0 && dx < mapSize && dy >= 0 && dy < mapSize)
                         {
-                            assert(get_cell(map, mapSize, dy,  dx)->point_value ==    BLAST_RADIUS_ENUM || EXPLOSIVE_ENUM);
+                            assert(get_cell(map, mapSize,dy, dx)->point_value   == BLAST_RADIUS_ENUM ||
+                                get_cell(map, mapSize,dy, dx)->point_value      == EXPLOSIVE_ENUM);
                         }
                     }
                 }

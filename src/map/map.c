@@ -15,7 +15,7 @@ void create_map(int mapSize, mapPoint* map, int* amount_of_mines) {
             cell = get_cell(map, mapSize, y, x);
             if(outcome == 1) {
                 cell->point_value = MINE_ENUM;
-                *amount_of_mines++;
+                *amount_of_mines  += 1;
             } else if (outcome > 1 && outcome < 5) {
                 cell->point_value = OBSTACLE_ENUM;
             } else if (outcome > 6 && outcome < 9) {
@@ -87,12 +87,15 @@ void print_map_info(int mapSize, mapPoint* map) {
     printf("\n");
 }
 
-void continue_check() {
-    printf("\n\033[0m");
-    int choice = 'b';
-    while (choice != 'c') {
+void continue_check(start) {
+    if (start)
+    {
+        printf("\n\033[0m");
+        int choice = 'b';
+        while (choice != 'c') {
             printf("Press c to continue\n");
             scanf(" %c", &choice);
+        }
+        printf("\n");
     }
-    printf("\n");
 }

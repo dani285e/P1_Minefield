@@ -33,7 +33,6 @@ void test_get_cell()
     assert(cell->point_value_x == x);
     assert(cell->point_value_y == y);
 
-    free(cell);
     free(map);
 }
 

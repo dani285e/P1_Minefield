@@ -70,7 +70,7 @@ void free_queue(Queue* queue) {
  * @param amount_of_deminers Antallet af deminere, der deltager i rydningen.
  * @param deminers Et array af `Deminer` strukturer, som indeholder den nuværende position og den afstand, hver deminer har tilbagelagt.
  */
-void find_shortest_path (int mapSize, mapPoint* map, int amount_of_deminers, Deminer* deminers) {
+void find_shortest_path (int mapSize, mapPoint* map, int amount_of_deminers, Deminer* deminers, int continue_check_i) {
     int amount_of_mines = -1;
     int shortest_distance = INT_MAX;
     int shortest_distance_x = 0;
@@ -127,7 +127,7 @@ void find_shortest_path (int mapSize, mapPoint* map, int amount_of_deminers, Dem
         // //Prompter for trinvis eksekvering af programmet:
         // char choice;
         // scanf(" %c", &choice);
-        continue_check();
+        continue_check(continue_check_i);
     }
 
     //Er alle miner nået flyttes deminerne ud af griddet:
@@ -190,7 +190,6 @@ void find_closest_mine(int* shortest_distance_x, int* shortest_distance_y, int* 
                     printf("One or more mines couldn't be reached\n");
                     continue;
                 }
-                //TODO Weight need to be implementet correctly
                 if (*weight < *shortest_distance_weight) {
                     *shortest_distance_weight = *weight;
                     *shortest_distance = distance;

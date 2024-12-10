@@ -42,7 +42,7 @@ void print_map_info(int mapSize, mapPoint* map);
 void initial_print_map(int mapSize, mapPoint* map);
 
 // Forhindrer programmet i et kører helt færdigt med det samme det køres
-void continue_check();
+void continue_check(int start);
 
 
 #endif //MAP_H

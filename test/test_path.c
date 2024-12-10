@@ -1,71 +1,43 @@
 #include "../src/path/path.h"
 #include <assert.h>
 
-void test_unit_counter();
-void test_compare_lines();
-void test_find_start_line();
 
+void test_path(void);
 
 int main(void) {
-
-    test_find_start_line();
-    test_unit_counter();
-    test_compare_lines();
+    test_path();
 
     return 0;
 }
 
-
-
-// START POINT / LINE
-void test_unit_counter()
+void test_path()
 {
     int mapSize = 20;
     int amount_of_mines = 0;
-
-    mapPoint* map = NULL;
-    map = (mapPoint*)malloc(sizeof(mapPoint)*mapSize*mapSize);
-    create_map(mapSize, map, &amount_of_mines);
-
-    int mines = unit_counter(0, mapSize-1, 0, mapSize-1, map, mapSize, MINE_ENUM);
-    assert(amount_of_mines == mines);
-}
-
-void test_compare_lines()
-{
-    assert(compare_lines(1, 2, 3, 4) == 4);
-    assert(compare_lines(1, 2, 4, 3) == 3);
-    assert(compare_lines(1, 4, 3, 2) == 2);
-    assert(compare_lines(4, 3, 2, 1) == 1);
-}
-
-void test_find_start_line()
-{
-    int mapSize = 20;
-    int amount_of_mines = 0;
-
-    mapPoint* map = NULL;
-    map = (mapPoint*)malloc(sizeof(mapPoint)*mapSize*mapSize);
-    create_map(mapSize, map, &amount_of_mines);
-
-    Deminer deminers[3];
     int amount_of_deminers = 3;
-    for (int i = 1; i < amount_of_deminers; i++)
+    int path = 0;
+    int stop_scanf = 0;
+
+    Deminer* deminers = NULL;
+    deminers = (Deminer*)malloc(sizeof(Deminer)*amount_of_deminers);
+
+    mapPoint* map = NULL;
+    map = (mapPoint*)malloc(sizeof(mapPoint)*mapSize*mapSize);
+    create_map(mapSize, map, &amount_of_mines);
+
+    function_find_start_line (mapSize, map, deminers, amount_of_deminers);
+    find_shortest_path(mapSize, map, amount_of_deminers, deminers, stop_scanf);
+
+    for (int x = 0; x < mapSize; x++)
     {
-        deminers[i].x = -1;
-        deminers[i].y = -1;
+        for (int y = 0; y < mapSize; y++)
+        {
+            mapPoint* cell = get_cell(map, mapSize, y, x);
+            if (cell->point_value == PATH_ENUM)
+            {
+                path++;
+            }
+        }
     }
-
-    double size = mapSize;
-    int top_counter = unit_counter(0, ceil(size/2)-1, 0, mapSize-1, map, mapSize, MINE_ENUM);
-    int left_counter = unit_counter(0, mapSize-1, 0, ceil(size/2)-1, map, mapSize, MINE_ENUM);
-    int right_counter = unit_counter(0, mapSize-1, floor(size/2), mapSize-1, map, mapSize, MINE_ENUM);
-    int bottom_counter = unit_counter(floor(size/2), mapSize-1, 0, mapSize-1, map, mapSize, MINE_ENUM);
-    printf("top counter: %d\n", top_counter);
-    printf("left counter: %d\n", left_counter);
-    printf("right counter: %d\n", right_counter);
-    printf("bottom_counter: %d\n", bottom_counter);
-
-
-    function_find_start_line(mapSize, map, deminers, amount_of_deminers);
+    assert(path != 0);
 }
