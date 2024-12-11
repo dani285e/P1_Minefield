@@ -1,9 +1,5 @@
 #include <assert.h>
-
-#include "../src/deminers/deminers.h"
 #include "../src/path/path.h"
-#include "../src/map/map.h"
-#include "../src/path/start_point/start_point.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -86,7 +82,7 @@ void test_obstacles() {
 }
 
 void test_walkable_obstacle() {
-      //deminer();
+    //deminer();
     srand(time(NULL));
 
     //int mapSize = (rand()% 20) + OBSTACLE_ENUM0;
