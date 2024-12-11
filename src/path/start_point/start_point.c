@@ -54,7 +54,7 @@ void function_find_start_line (int mapSize, mapPoint* map, Deminer* deminers, in
         break;
     }
 
-    printf("\nThe starting line for the deminers is: %s\n", start_line_name);
+    printf("\nThe starting line for the de-miners is: %s\n", start_line_name);
 
 
     startpoint pointList[amount_of_deminers]; // Listen er ligeså lang som mængden af deminers der er
@@ -96,6 +96,6 @@ void function_find_start_line (int mapSize, mapPoint* map, Deminer* deminers, in
         deminers[i].distance = 0;
         deminers[i].time_taken = 0;
 
-        printf("Starting point for deminer %d is X:%d, Y:%d\n", i+1, pointList[i].start_point_x, pointList[i].start_point_y);
+        printf("Starting point for de-miner %d is X:%d, Y:%d\n", i+1, pointList[i].start_point_x, pointList[i].start_point_y);
     }
 }

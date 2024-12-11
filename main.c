@@ -12,35 +12,42 @@
 
 int main(void) {
 
-    //deminer();
-    srand(time(NULL));
+    srand(time(NULL)); // Sætter rand seed
 
-    mapPoint* map = NULL;
-    //int mapSize = (rand()% 11) + 20;
-    int mapSize = 50;
-    int amount_of_mines = 0;
-    int amount_of_deminers = 3; //TODO SKAL VÆRE GIVET FRA EN ANDEN FUNKTION
-    int quick_run = 2;
-    map = (mapPoint*)malloc(sizeof(mapPoint)*mapSize*mapSize);
-    Deminer* deminers = NULL;
-    deminers = (Deminer*)malloc(sizeof(Deminer)*amount_of_deminers);
-    continue_check();
-    create_map(mapSize, map, &amount_of_mines);
-    initial_print_map(mapSize, map);
-    continue_check();
-    print_map_info(mapSize, map);
-    continue_check();
-    function_find_start_line(mapSize, map, deminers, amount_of_deminers);
-    print_map(mapSize, map, deminers, amount_of_deminers);
-    while (quick_run != 1 && quick_run != 0) {
-        printf("\033[0m");
-        printf("Select run mode:\nQuick run (press 1)\nRegular run (press 0)\n");
-        scanf("%d", &quick_run);
-    }
-    find_shortest_path(mapSize, map, amount_of_deminers, deminers, quick_run);
+    mapPoint* map = NULL; // map er en pointer til mapPoint struct
 
-    free(map);
-    free(deminers);
+    int mapSize = (rand()% 11) + 20; // mapSize bliver et random til mellem 20 og 30 inklusiv
+    int amount_of_mines = 0; // amount_of_mines initialiseres, værdien ændres senere
+    int quick_run = 2; // quick_run initialiseres, værdien ændres senere
+    int amount_of_deminers = 0; // amount_of_deminers initialiseres, værdien ændres senere
+
+    map = (mapPoint*)malloc(sizeof(mapPoint)*mapSize*mapSize); // Pladsen til map array allokeres
+
+    Deminer* deminers = NULL; // deminers er en pointer til Deminer struct
+
+    continue_check(); // Programmet stopper indtil det modtager bruger input
+    create_map(mapSize, map, &amount_of_mines); // Mappet genereres
+
+    initial_print_map(mapSize, map); // Mappet printes ud med clears, obstacles og mines
+
+    user_input_deminers(mapSize, &amount_of_deminers); // Brugeren vælger hvor mange de-miners der skal bruges
+
+    deminers = (Deminer*)malloc(sizeof(Deminer)*amount_of_deminers); // Pladsen til deminers array allokeres
+
+    continue_check(); // Programmet stopper indtil det modtager bruger input
+    print_map_info(mapSize, map, amount_of_deminers); // Map info udskrives
+
+    continue_check(); // Programmet stopper indtil det modtager bruger input
+    function_find_start_line(mapSize, map, deminers, amount_of_deminers); // Startline findes og starting points genereres
+
+    print_map(mapSize, map, deminers, amount_of_deminers); // Mappet printes ud med clears, obstacles, mines og de-miners
+
+    run_mode(&quick_run); // Brugeren vælger en run mode
+
+    find_shortest_path(mapSize, map, amount_of_deminers, deminers, quick_run); // Resten af programmet køres her
+
+    free(map); // Map array bliver free
+    free(deminers); // Deminers array bliver free
 
     return 0;
 }

@@ -114,7 +114,7 @@ void find_shortest_path (int mapSize, mapPoint* map, int amount_of_deminers, Dem
         bfs_find_distance(mapSize, map, deminers[whose_turn].x, deminers[whose_turn].y, shortest_distance_x, shortest_distance_y, path, &path_length, &weight);
         print_path(shortest_distance, path, mapSize, map, deminers, whose_turn, &time); //Printer pathen og opdaterer tid for deminers:
         if (quick_run == 0) {
-            printf("The shortest distance to a mine is %d\nThe mine is located at X:%d, Y:%d\nDeminer %d moves\nIt takes %d minutes to reach the mine and plant an explosive\n", path_length, shortest_distance_x, shortest_distance_y, whose_turn + 1, time);
+            printf("The shortest distance to a mine is %d\nThe mine is located at X:%d, Y:%d\nDe-miner %d moves\nIt takes %d minutes to reach the mine and plant an explosive\n", path_length, shortest_distance_x, shortest_distance_y, whose_turn + 1, time);
         }
 
         //Opdaterer deminerens placering, og hvis tur det er, så samme deminer ikke også går næste gang:
@@ -152,12 +152,12 @@ void find_shortest_path (int mapSize, mapPoint* map, int amount_of_deminers, Dem
     int total_distance = 0;
     int total_time = 0;
     for (int i = 0; i < amount_of_deminers; i++) {
-        printf("Total distance walked for deminer %d is %d, it took %d minutes\n", i+1,  deminers[i].distance, deminers[i].time_taken);
+        printf("Total distance walked for de-miner %d is %d, it took %d minutes\n", i+1,  deminers[i].distance, deminers[i].time_taken);
         total_distance += deminers[i].distance;
         total_time += deminers[i].time_taken;
     }
-    printf("Total distance walked all deminers is %d\n", total_distance);
-    printf("Total time spent by all deminers is %d minutes\n", total_time);
+    printf("Total distance walked all de-miners is %d\n", total_distance);
+    printf("Total time spent by all de-miners is %d minutes\n", total_time);
 }
 
 /**

@@ -61,19 +61,17 @@ void print_map(int mapSize, mapPoint* map, Deminer* deminers, int amount_of_demi
     }
 }
 
-void print_map_info(int mapSize, mapPoint* map) {
+void print_map_info(int mapSize, mapPoint* map, int amount_of_deminers) {
     int mineCounter = unit_counter(0, mapSize-1, 0, mapSize-1, map, mapSize, MINE_ENUM);
     printf("\033[0m");
-    printf("This is a given map of a minefield\n");
-    printf("It has the size %d * %d\n", mapSize, mapSize);
     printf("\033[0;32m'.' is a Clear Tile\n");
     printf("\033[0;36m'W' is a Walkable Obstacle Tile\n");
     printf("\033[0;33m'X' is a NON-Walkable Obstacle Tile\n");
     printf("\033[0;31m'M' is a Mine\n");
     printf("\033[0;34m'E' is an Explosive\n");
     printf("\033[0;35m'B' is the Blast Radius\n");
-    printf("\033[0m'Numbers' are deminers on the map ranging from 1 to n\n");
-    printf("\033[0m'*' is a Path walked on by a deminer\n\n");
+    printf("\033[0m'Numbers' are de-miners on the map ranging from 1 to %d\n", amount_of_deminers);
+    printf("\033[0m'*' is a Path walked on by a de-miner\n\n");
     printf("\nThere is a total of %d mines there needs to be cleared\n", mineCounter);
     printf("They are located at the following points\n\n");
     int counter = 0;
@@ -96,4 +94,28 @@ void continue_check() {
             scanf(" %c", &choice);
     }
     printf("\n");
+}
+
+void user_input_deminers(int mapSize, int* amount_of_deminers) {
+    int recommended_amount = ((mapSize * mapSize) / 200) + 1;
+    int user_choice = 0;
+    printf("\033[0m");
+    printf("This is a given map of a minefield\n");
+    printf("It has the size %d * %d\n", mapSize, mapSize);
+    printf("It is recommended to use %d de-miners\n", recommended_amount);
+    while(user_choice < 1) {
+        printf("\nInput an amount of de-miners\n");
+        scanf("%d", &user_choice);
+    }
+    *amount_of_deminers = user_choice;
+}
+
+void run_mode(int* quick_run) {
+    int user_choice = 2;
+    while (user_choice != 1 && user_choice != 0) {
+        printf("\033[0m");
+        printf("Select run mode:\nQuick run (press 1)\nRegular run (press 0)\n");
+        scanf("%d", &user_choice);
+    }
+    *quick_run = user_choice;
 }
