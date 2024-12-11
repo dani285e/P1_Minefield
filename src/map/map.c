@@ -87,7 +87,7 @@ void print_map_info(int mapSize, mapPoint* map) {
     printf("\n");
 }
 
-void continue_check(start) {
+void continue_check(int start) {
     if (start)
     {
         printf("\n\033[0m");
