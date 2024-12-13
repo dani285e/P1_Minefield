@@ -1,8 +1,4 @@
-
-
 #include "colour.h"
-
-
 
 char point_value_color[11][10] = {
     "\033[0;32m",   //CLEAR_ENUM (Green)
@@ -14,6 +10,6 @@ char point_value_color[11][10] = {
     "\033[0m",      //PATH_ENUM (Default/No color)
     "\033[0m",      //LOWER_ELEVATION_ENUM (Default/No color)
     "\033[0m",      //LESSER_ELEVATION_ENUM (Default/No color)
-    "\033[0m",       //HILL_ENUM (Default/No color)
+    "\033[0m",      //HILL_ENUM (Default/No color)
     "\033[0;35m"    // Blast_Radius (Purple)
 };

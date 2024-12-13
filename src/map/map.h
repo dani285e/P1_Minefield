@@ -1,5 +1,3 @@
-
-
 #ifndef MAP_H
 #define MAP_H
 #include "src/structs.h"
@@ -7,7 +5,6 @@
 #include "src/path/start_point/start_point.h"
 #include <stdio.h>
 #include <stdlib.h>
-
 
 /// Giver en pointer til en celle, ud fra mappet, mapsize og cellens x- og y-værdi.
 /// @param map Bruges til indeksering for celle-indeks

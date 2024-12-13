@@ -7,8 +7,6 @@ add_library(mining_functions
 
         src/blast_radius/blast_radius.c
         src/blast_radius/blast_radius.h
-        src/deminers/deminers.c
-        src/deminers/deminers.h
         src/map/map.c
         src/map/map.h
         src/map/colour/colour.c
@@ -21,7 +19,6 @@ add_library(mining_functions
 )
 
 target_include_directories(mining_functions PUBLIC .)
-
 
 add_executable(P1_Minefield main.c)
 target_link_libraries(P1_Minefield mining_functions)

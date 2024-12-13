@@ -1,13 +1,12 @@
 #include "path.h"
 
-
-
 Queue* create_queue() {
     Queue* queue = (Queue*)malloc(sizeof(Queue));
     queue->front = NULL;
     queue->rear = NULL;
     return queue;
 }
+
 void enqueue(Queue* queue, int x, int y, int distance) {
     QueueNode* new_node = (QueueNode*)malloc(sizeof(QueueNode));
     new_node->x = x;
@@ -23,6 +22,7 @@ void enqueue(Queue* queue, int x, int y, int distance) {
         queue->rear = new_node;
     }
 }
+
 int dequeue(Queue* queue, int* x, int* y, int* distance) {
     if (queue->front == NULL) {
         return 0; // Køen er tom
@@ -41,9 +41,11 @@ int dequeue(Queue* queue, int* x, int* y, int* distance) {
     free(temp);
     return 1; // Succesfuld fjernelse
 }
+
 int is_empty(Queue* queue) {
     return (queue->front == NULL);
 }
+
 void free_queue(Queue* queue) {
     QueueNode* current = queue->front;
     while (current != NULL) {
@@ -54,13 +56,6 @@ void free_queue(Queue* queue) {
     free(queue);
 }
 
-
-// Funktion der skal kunne genererer en rute med hjælp fra Nearest Neighbor Algoritmen
-// Først skal den vidde sit startspunkt
-// Så skal den kunne vidde afstanden til alle andre miner
-// Så skal den vælge den mine der er tættest på og gå hen til den og punktets værdi sættes til 'E'
-// Så skal den gøre det hele igen indtil der ikke er flere miner
-
 /**
  * Funktion til at finde og navigere med den korteste rute for deminere, for at rydde miner på et givet kort.
  * Deminerne arbejder i en rotation og finder den nærmeste mine til dem og navigere mod den ved hjælp af BFS.
@@ -70,6 +65,7 @@ void free_queue(Queue* queue) {
  * @param amount_of_deminers Antallet af deminere, der deltager i rydningen.
  * @param deminers Et array af `Deminer` strukturer, som indeholder den nuværende position og den afstand, hver deminer har tilbagelagt.
  */
+
 void find_shortest_path (int mapSize, mapPoint* map, int amount_of_deminers, Deminer* deminers, int quick_run) {
     int amount_of_mines = -1;
     int shortest_distance = INT_MAX;
@@ -79,7 +75,6 @@ void find_shortest_path (int mapSize, mapPoint* map, int amount_of_deminers, Dem
     int whose_turn = 0;
     int time = 0;
     mapPoint* cell;
-    //deminer* current_deminer = deminers[0];
 
     int** path = malloc(mapSize * mapSize * sizeof(int*)); //Allokerer array, der holder stien
     if (path == NULL) {
@@ -104,12 +99,9 @@ void find_shortest_path (int mapSize, mapPoint* map, int amount_of_deminers, Dem
         find_closest_mine(&shortest_distance_x, &shortest_distance_y, &shortest_distance, &shortest_distance_weight ,mapSize, map, whose_turn,
                             deminers, &amount_of_mines, path, &path_length, &weight);
 
-
         //Nulstiller tid for deminers
-
         //Efter den tætteste mine er fundet af køres bfs med mål kun mod den tætteste mine,
         //for at opdatere path til den korrekte, så ruten kan genskabes:
-
         reset_path(path, mapSize); //Resetter path array til -1
         bfs_find_distance(mapSize, map, deminers[whose_turn].x, deminers[whose_turn].y, shortest_distance_x, shortest_distance_y, path, &path_length, &weight);
         print_path(shortest_distance, path, mapSize, map, deminers, whose_turn, &time); //Printer pathen og opdaterer tid for deminers:
@@ -128,9 +120,7 @@ void find_shortest_path (int mapSize, mapPoint* map, int amount_of_deminers, Dem
         //Planter explosive på minens placering
         get_cell(map, mapSize, shortest_distance_y, shortest_distance_x)->point_value = EXPLOSIVE_ENUM;
 
-        // //Prompter for trinvis eksekvering af programmet:
-        // char choice;
-        // scanf(" %c", &choice);
+        // Vil kun køres hvis brugeren har valgt regular run mode
         if (quick_run == 0) {
             continue_check();
         }
@@ -196,14 +186,13 @@ void find_closest_mine(int* shortest_distance_x, int* shortest_distance_y, int* 
                     printf("One or more mines couldn't be reached\n");
                     continue;
                 }
-                //TODO Weight need to be implementet correctly
+                // Er den nuværende vægt mindre end den tidligere så opdateres følgende værdier
                 if (*weight < *shortest_distance_weight) {
                     *shortest_distance_weight = *weight;
                     *shortest_distance = distance;
                     *shortest_distance_x = x;
                     *shortest_distance_y = y;
                 }
-                //printf("The distance is %d to mine X:%d, Y:%d\n", distance, x, y);
             }
         }
     }

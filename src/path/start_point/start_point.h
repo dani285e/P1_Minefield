@@ -5,7 +5,6 @@
 #include <math.h>
 #include "src/map/map.h"
 
-///
 /// @param y_1
 /// @param y_2
 /// @param x_1

@@ -1,7 +1,7 @@
 #include "src/path/start_point/start_point.h"
 #include "string.h"
 
-// Funktion search_map der tager 5 ints og en pointer til map paremeter
+// Funktion search_map der tager 5 ints og en pointer til map parameter
 int unit_counter(int y_1, int y_2, int x_1, int x_2, mapPoint* map, int mapSize, int unit)
 {
     mapPoint* cell;
@@ -55,7 +55,6 @@ void function_find_start_line (int mapSize, mapPoint* map, Deminer* deminers, in
     }
 
     printf("\nThe starting line for the de-miners is: %s\n", start_line_name);
-
 
     startpoint pointList[amount_of_deminers]; // Listen er ligeså lang som mængden af deminers der er
 

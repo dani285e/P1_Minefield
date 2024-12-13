@@ -40,7 +40,6 @@ void initial_print_map(int mapSize, mapPoint* map) {
     }
 }
 
-
 void print_map(int mapSize, mapPoint* map, Deminer* deminers, int amount_of_deminers) {
     mapPoint* cell;
     for (int y = 0; y < mapSize; y++) {
@@ -103,9 +102,14 @@ void user_input_deminers(int mapSize, int* amount_of_deminers) {
     printf("This is a given map of a minefield\n");
     printf("It has the size %d * %d\n", mapSize, mapSize);
     printf("It is recommended to use %d de-miners\n", recommended_amount);
-    while(user_choice < 1) {
+    while(user_choice < 1 || user_choice > mapSize) {
         printf("\nInput an amount of de-miners\n");
         scanf("%d", &user_choice);
+        if (user_choice < 1 || user_choice > mapSize) {
+            printf("Invalid amount of de-miners please try again\n");
+            while (getchar() != '\n')
+            user_choice = 0;
+        }
     }
     *amount_of_deminers = user_choice;
 }
@@ -116,6 +120,11 @@ void run_mode(int* quick_run) {
         printf("\033[0m");
         printf("Select run mode:\nQuick run (press 1)\nRegular run (press 0)\n");
         scanf("%d", &user_choice);
+        if (user_choice != 1 && user_choice != 0) {
+            printf("Invalid run mode selected please try again\n");
+            while (getchar() != '\n');
+            user_choice = 2;
+        }
     }
     *quick_run = user_choice;
 }

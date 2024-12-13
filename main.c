@@ -1,14 +1,9 @@
-#include "src//deminers/deminers.h"
 #include "src/path/path.h"
 #include "src/map/map.h"
 #include "src/path/start_point/start_point.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <math.h>
-#include <windows.h>
-
-#define MINES 20
 
 int main(void) {
 
@@ -31,7 +26,6 @@ int main(void) {
     initial_print_map(mapSize, map); // Mappet printes ud med clears, obstacles og mines
 
     user_input_deminers(mapSize, &amount_of_deminers); // Brugeren vælger hvor mange de-miners der skal bruges
-
     deminers = (Deminer*)malloc(sizeof(Deminer)*amount_of_deminers); // Pladsen til deminers array allokeres
 
     continue_check(); // Programmet stopper indtil det modtager bruger input

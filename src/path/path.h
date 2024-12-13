@@ -1,7 +1,3 @@
-//
-// Created by kaspe on 05-12-2024.
-//
-
 #ifndef PATH_H
 #define PATH_H
 #include "src/structs.h"
