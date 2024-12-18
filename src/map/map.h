@@ -29,21 +29,27 @@ void create_map(int mapSize, mapPoint* map, int* amount_of_mines);
 /// @param amount_of_deminers Bruges som grænse for at loope gennem deminernes lokationer.
 void print_map(int mapSize, mapPoint* map, Deminer* deminers, int amount_of_deminers);
 
-/// Printer info omkring mappet. (Antal miner, placeringer)
+/// Printer info omkring mappet. (Antal miner, placeringer, antal deminers)
 /// @param mapSize
 /// @param map
+/// @param amount_of_deminers
 void print_map_info(int mapSize, mapPoint* map, int amount_of_deminers);
 
 
-// Bruges første gang mappet udskrives så vi får et map uden deminers
+/// Printer mappet uden deminers
+/// @param mapSize
+/// @param map
 void initial_print_map(int mapSize, mapPoint* map);
 
-// Forhindrer programmet i et kører helt færdigt med det samme det køres
+/// Forhindrer programmet i et kører helt færdigt med det samme det køres
 void continue_check();
 
-// Skal give et forslag til antal deminers og derefter lade brugeren bestemme antallet
+/// Tager input til antal deminers, men giver også et anbefalet antal baseret på størrelsen af mappet
+/// @param mapSize Bruges til anbefaling
+/// @param amount_of_deminers Assigner antal deminers til variablen.
 void user_input_deminers(int mapSize, int* amount_of_deminers);
 
-// Brugeren vælger en run mode
+/// Prompter brugeren for run mode 1 for quick 0 for normal.
+/// @param quick_run Returneres gennem parameter
 void run_mode(int* quick_run);
 #endif //MAP_H

@@ -44,6 +44,7 @@ void free_queue(Queue* queue);
 /// @param map Bruger mappet til at tjekke for miner.
 /// @param amount_of_deminers Bruger antallet af deminers, så BFS-algoritmen og mappet kan opdateres tilsvarende
 /// @param deminers Bruger deminer-arrayet for at holde styr på deminernes lokation.
+/// @param quick_run Bruges til at bestemme run_mode, altså om programmet kører hurtigt eller langsomt igennem.
 void find_shortest_path (int mapSize, mapPoint* map, int amount_of_deminers, Deminer* deminers, int quick_run);
 
 /// Finder den mine, der er tættest på whose_turn-demineren ved at udregne afstanden fra demineren hen til alle miner.
@@ -80,7 +81,7 @@ int bfs_find_distance(int mapsize, mapPoint* map, int start_x, int start_y, int 
 void reset_path(int** path, int mapsize);
 
 /// Indskriver stien i mappet.
-/// @param path_length Bruger stiens længde som grænse i loop.
+/// @param shortest_distance Bruger stiens længde som grænse i loop.
 /// @param path Bruger path-array for x- og y-værdier til stien.
 /// @param mapSize Bruger mapSize til kontrol af punkter, og indeksering af map[y * mapSize + x]
 /// @param map Indskriver stien i mappet.

@@ -5,15 +5,15 @@
 #include <math.h>
 #include "src/map/map.h"
 #include "src/structs.h"
-
-/// @param y_1
+/// Tæller antal units i et givet område, der spænder fra og med x1 til x2, det samme for y.
+/// @param y_1 Bruger x- og y-værdier som grænse for søgning
 /// @param y_2
 /// @param x_1
 /// @param x_2
-/// @param map
-/// @param mapSize
-/// @param unit
-/// @return
+/// @param map Bruges til get_cell() kald.
+/// @param mapSize Bruges til get_cell() kald.
+/// @param unit Tager unit som parameter, så funktionen ved hvad den skal søge efter.
+/// @return Returnerer antallet af units i et givet område
 int unit_counter(int y_1, int y_2, int x_1, int x_2, mapPoint* map, int mapSize, int unit);
 
 /// Sammenligningsfunktion, der tager fire ints, og finder den største værdi.
