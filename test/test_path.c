@@ -13,13 +13,12 @@ int main(void) {
     return 0;
 }
 
-void test_path()
-{
+void test_path() {
     int mapSize = 20;
     int amount_of_mines = 0;
     int amount_of_deminers = 3;
     int path = 0;
-    int stop_scanf = 0;
+    int quick_run = 1;
 
     Deminer* deminers = NULL;
     deminers = (Deminer*)malloc(sizeof(Deminer)*amount_of_deminers);
@@ -29,7 +28,7 @@ void test_path()
     create_map(mapSize, map, &amount_of_mines);
 
     function_find_start_line (mapSize, map, deminers, amount_of_deminers);
-    find_shortest_path(mapSize, map, amount_of_deminers, deminers, stop_scanf);
+    find_shortest_path(mapSize, map, amount_of_deminers, deminers, quick_run);
 
     for (int x = 0; x < mapSize; x++)
     {
@@ -98,10 +97,10 @@ void test_shortest_path() {
         }
     }
 
-    int continue_continue = 0;
+    int quick_run = 1;
     print_map(mapSize, map, deminers, amount_of_deminers);
 
-    find_shortest_path(mapSize, map, amount_of_deminers, deminers, continue_continue);
+    find_shortest_path(mapSize, map, amount_of_deminers, deminers, quick_run);
 
     int time_spent = 89;
     assert(time_spent == deminers[0].time_taken);

@@ -2,8 +2,6 @@ add_library(mining_functions
 
         blast_radius/blast_radius.c
         blast_radius/blast_radius.h
-        deminers/deminers.c
-        deminers/deminers.h
         map/map.c
         map/map.h
         map/colour/colour.c

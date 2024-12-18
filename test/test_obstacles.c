@@ -70,9 +70,9 @@ void test_obstacles() {
         }
     }
 
-    int continue_continue = 0;
+    int quick_run = 1;
 
-    find_shortest_path(mapSize, map, amount_of_deminers, deminers, continue_continue);
+    find_shortest_path(mapSize, map, amount_of_deminers, deminers, quick_run);
 
     int time_spent = 44;
     assert(time_spent == deminers[0].time_taken);
@@ -133,9 +133,9 @@ void test_walkable_obstacle() {
         }
     }
 
-    int continue_continue = 0;
+    int quick_run = 1;
 
-    find_shortest_path(mapSize, map, amount_of_deminers, deminers, continue_continue);
+    find_shortest_path(mapSize, map, amount_of_deminers, deminers, quick_run);
 
     int time_spent = 7;
     assert(time_spent == deminers[0].time_taken);

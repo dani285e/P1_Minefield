@@ -67,9 +67,9 @@ void test_time() {
         }
     }
 
-    int continue_continue = 0;
+    int quick_run = 1;
 
-    find_shortest_path(mapSize, map, amount_of_deminers, deminers, continue_continue);
+    find_shortest_path(mapSize, map, amount_of_deminers, deminers, quick_run);
 
     int time_spent_overall = 60;
     int time_spent_each = 20;
