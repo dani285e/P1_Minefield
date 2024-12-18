@@ -85,17 +85,15 @@ void print_map_info(int mapSize, mapPoint* map, int amount_of_deminers) {
     printf("\n");
 }
 
-void continue_check(int start) {
-    if (start)
-    {
-        printf("\n\033[0m");
-        int choice = 'b';
-        while (choice != 'c') {
-            printf("Press c to continue\n");
+void continue_check() {
+    printf("\n\033[0m");
+
+    int choice = 'b';
+    while (choice != 'c') {
+        printf("Press c to continue\n");
             scanf(" %c", &choice);
-        }
-        printf("\n");
     }
+    printf("\n");
 }
 
 void user_input_deminers(int mapSize, int* amount_of_deminers) {

@@ -39,7 +39,7 @@ void print_map_info(int mapSize, mapPoint* map, int amount_of_deminers);
 void initial_print_map(int mapSize, mapPoint* map);
 
 // Forhindrer programmet i et kører helt færdigt med det samme det køres
-void continue_check(int start);
+void continue_check();
 
 // Skal give et forslag til antal deminers og derefter lade brugeren bestemme antallet
 void user_input_deminers(int mapSize, int* amount_of_deminers);
