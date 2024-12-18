@@ -1,5 +1,3 @@
-
-
 #ifndef MAP_H
 #define MAP_H
 
@@ -9,7 +7,6 @@
 #include "src/path/start_point/start_point.h"
 #include "src/map/colour/colour.h"
 #include "src/structs.h"
-
 
 /// Giver en pointer til en celle, ud fra mappet, mapsize og cellens x- og y-værdi.
 /// @param map Bruges til indeksering for celle-indeks
@@ -35,7 +32,7 @@ void print_map(int mapSize, mapPoint* map, Deminer* deminers, int amount_of_demi
 /// Printer info omkring mappet. (Antal miner, placeringer)
 /// @param mapSize
 /// @param map
-void print_map_info(int mapSize, mapPoint* map);
+void print_map_info(int mapSize, mapPoint* map, int amount_of_deminers);
 
 
 // Bruges første gang mappet udskrives så vi får et map uden deminers
@@ -44,5 +41,9 @@ void initial_print_map(int mapSize, mapPoint* map);
 // Forhindrer programmet i et kører helt færdigt med det samme det køres
 void continue_check(int start);
 
+// Skal give et forslag til antal deminers og derefter lade brugeren bestemme antallet
+void user_input_deminers(int mapSize, int* amount_of_deminers);
 
+// Brugeren vælger en run mode
+void run_mode(int* quick_run);
 #endif //MAP_H

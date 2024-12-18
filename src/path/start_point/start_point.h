@@ -6,7 +6,6 @@
 #include "src/map/map.h"
 #include "src/structs.h"
 
-///
 /// @param y_1
 /// @param y_2
 /// @param x_1
